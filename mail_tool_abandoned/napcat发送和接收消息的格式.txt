@@ -1,0 +1,172 @@
+'''
+以下是接收消息的"napcat_mail"里的格式
+
+'''
+
+
+'''
+群聊
+'''
+
+"napcat_mail": {
+    "event_type": "message.group",
+    "sender_qq": 2854196310,
+    "sender_nickname": "Q群管家",
+    "group_id": 594051605,
+    "time": 1780813623,
+    "message_id": 852899450,
+    "message_type": "group",
+    "sub_type": "normal",
+    "notice_type": null,
+    "message": "欢迎加入UMP大家族哦，服务器IP地址和新人手册都在置顶公告，群文件有懒人包拖到启动器导入。玩得开心",
+    "raw_message": "[CQ:at,qq=3980199539] 欢迎加入...",
+    "message_array": [
+        {"type": "at",   "data": {"qq": "3980199539"}},
+        {"type": "text", "data": {"text": " "}},
+        {"type": "text", "data": {"text": "欢迎加入UMP大家族哦..."}},
+        {"type": "image","data": {"file": "{f974ea1e...}.jpg", "url": "https://..."}}
+    ]
+}
+
+'''
+好友私聊
+'''
+
+"napcat_mail": {
+    "event_type": "message.private",
+    "sender_qq": 1772578581,
+    "sender_nickname": "YUANBEI",
+    "group_id": null,
+    "time": 1780816517,
+    "message_id": 1167924289,
+    "message_type": "private",
+    "sub_type": "friend",
+    "notice_type": null,
+    "message": "2",
+    "raw_message": "2",
+    "message_array": [{"type": "text", "data": {"text": "2"}}]
+}
+
+'''
+临时会话
+'''
+
+"napcat_mail": {
+    "event_type": "message.group_temp",
+    "sender_qq": 3617089947,
+    "sender_nickname": "临时会话",
+    "group_id": 1036440930,
+    "time": 1780812038,
+    "message_id": 1992822845,
+    "message_type": "private",
+    "sub_type": "group",
+    "notice_type": null,
+    "message": "1",
+    "raw_message": "1",
+    "message_array": [{"type": "text", "data": {"text": "1"}}]
+}
+
+
+'''
+成员加群
+'''
+
+
+"napcat_mail": {
+    "event_type": "notice.group_increase",
+    "sender_qq": 3980199539,
+    "group_id": 594051605,
+    "time": 1780813622,
+    "notice_type": "group_increase",
+    "sub_type": "approve",
+    "operator_id": 1772578581,
+    "message": null,
+    "message_type": null
+}
+
+'''
+成员退群
+'''
+
+"napcat_mail": {
+    "event_type": "notice.group_decrease",
+    "sender_qq": 3980199539,
+    "group_id": 594051605,
+    "time": 1780813744,
+    "notice_type": "group_decrease",
+    "sub_type": "leave",
+    "operator_id": 0,
+    "message": null,
+    "message_type": null
+}
+
+'''
+加群申请
+'''
+
+"napcat_mail": {
+    "event_type": "request.group_add",
+    "sender_qq": 3617089947,
+    "group_id": 1036440930,
+    "time": 1780816436,
+    "request_type": "group",
+    "sub_type": "add",
+    "comment": "111",
+    "flag": "1780816435070393",
+    "message": null,
+    "message_type": null,
+    "notice_type": null
+}
+
+
+
+'''
+下面是mail格式中发送到napcat的格式
+'''
+
+1. 发群聊
+
+"umps_mail": {
+    "action": "send_group_msg",
+    "target": 123456789,
+    "text": "大家好"
+}
+2. 发好友私聊
+
+"umps_mail": {
+    "action": "send_private_msg",
+    "target": 987654321,
+    "text": "你好朋友"
+}
+3. 发群临时会话
+
+"umps_mail": {
+    "action": "send_msg",
+    "target": 987654321,
+    "group_id": 123456789,
+    "text": "你好，这是临时会话"
+}
+4. 同意加群
+
+"umps_mail": {
+    "action": "set_group_add_request",
+    "flag": "abc123def456",
+    "sub_type": "add",
+    "approve": true
+}
+5. 拒绝加群
+
+"umps_mail": {
+    "action": "set_group_add_request",
+    "flag": "abc123def456",
+    "sub_type": "add",
+    "approve": false,
+    "reason": "抱歉，本群已满员"
+}
+
+6. 撤回消息
+
+"umps_mail": {
+    "action": "delete_msg",
+    "target": 63707623
+}

@@ -1,0 +1,55 @@
+
+======执行服务器指令=====
+
+"umps_mail": {
+    "post_type": "execute_command",
+    "request_id": "req_001",
+    "command": "list"
+}
+
+"minecraft_mail": {
+    "post_type": "execute_result",
+    "request_id": "req_001",
+    "command": "list",
+    "success": true,
+    "output": "There are 2 of a max of 20 players online: Steve, Alex"
+}
+
+
+======查询玩家信息（金币+在线时长合并）=====
+
+"umps_mail": {"post_type": "get_player_info", "player": "Qiuicy"}
+
+"minecraft_mail": {
+    "post_type": "player_info_result",
+    "player": "Qiuicy",
+    "success": true,
+    "money": 99917643442.62,
+    "money_formatted": "$99,917,643,442.62",
+    "online_time": {
+        "total_seconds": 16315,
+        "total_formatted": "4h 31m 55s",
+        "joins": 20
+    }
+}
+// 单项失败对应字段为 null，success 保持 true
+
+
+======查询服务器在线状态=====
+
+"umps_mail": {"post_type": "get_server_info"}
+
+"minecraft_mail": {
+    "post_type": "server_info_result",
+    "online_count": 5,
+    "online_players": ["Steve", "Alex", "Qiuicy"]
+}
+
+
+======玩家进入服务器通知=====
+
+"minecraft_mail": {
+    "post_type": "player_joined",
+    "player": "id",
+    "uuid": "uuid"
+}
