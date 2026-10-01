@@ -5,7 +5,7 @@ from datetime import datetime
 
 # 连接配置
 NAPACT_URL = "ws://127.0.0.1:6000"
-HUB_URL = "ws://localhost:8003"
+HUB_URL = "ws://127.0.0.1:8003"
 
 
 async def napcat_client():

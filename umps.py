@@ -3,6 +3,7 @@ import json
 import requests
 import websockets
 from mail_tool.File_Check import File_Check
+from mail_tool.review import review
 
 TransferStation = None
 mail_queue = [] #接收到的消息待处理列表
@@ -27,7 +28,7 @@ data = {
 
 
 #主要工具注册
-mail_tool = []
+mail_tool = [review]
 
 #定时工具注册
 timing_tool = []
@@ -75,7 +76,7 @@ async def deal_with():
             # 循环工具列表
             Processed = 0
             for i in mail_tool:
-                re = i(mail)
+                re = i(mail=mail)
                 if re != None:
                     if type(re) == dict:
                         send_list.append(re)
