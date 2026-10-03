@@ -117,3 +117,7 @@ def File_Check():
         pass
     else:
         os.makedirs('./UMPs/Review', exist_ok=True)
+    if os.path.exists('./UMPs/PlayerData/ReviewData'):
+        pass
+    else:
+        os.makedirs('./UMPs/PlayerData/ReviewData', exist_ok=True)

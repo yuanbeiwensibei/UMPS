@@ -1,0 +1,15 @@
+{% extends "audit/base_mobile.html" %}
+{% block title %}链接不可用{% endblock %}
+{% block content %}
+
+<div class="stage-wrap">
+  <div class="stage">
+    <div class="glyph" style="background:var(--green-900);">
+      <span style="color:var(--green-200); font-size:36px; font-weight:900;">!</span>
+    </div>
+    <h1>链接不可用</h1>
+    <p>{{ message }}</p>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "audit/base_mobile.html" %}
+{% block title %}入服审核{% endblock %}
+{% block counter %}<span class="counter" data-counter>0/{{ questions|length }}</span>{% endblock %}
+{% block content %}
+
+<header class="mheader">
+  <span class="badge"><b>●</b> 入服审核 · 孟菲斯绿</span>
+  <h1>入服<span class="outline">审核</span></h1>
+  <p class="sub">一共 {{ questions|length }} 题 · 认真作答，闹中取静</p>
+</header>
+
+<div class="wrap">
+  {% if errors %}
+  <div class="alert">
+    <p>提交未通过，请检查以下问题：</p>
+    <ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul>
+  </div>
+  {% endif %}
+
+  <form id="review-form" method="post" action="{% url 'review_submit' link_id %}">
+    {% csrf_token %}
+    {% for q in questions %}
+    <div class="qcard" data-reveal style="--delay:{% widthratio forloop.counter0 1 15 %}ms">
+      <span class="qnum">{{ q.id }}</span>
+      <div class="qtext">{{ q.text }}{% if q.type == "single" %}<span class="req">单选</span>{% else %}<span class="req">必填</span>{% endif %}</div>
+
+      {% if q.type == "single" %}
+        {% for label, text in q.options.items %}
+        <label class="opt">
+          <input type="radio" name="q{{ q.id }}" value="{{ label }}"{% if q.previous == label %} checked{% endif %}>
+          <span class="box"></span>
+          <span class="opt-no">{{ label }}</span>
+          <span class="opt-txt">{{ text }}</span>
+        </label>
+        {% endfor %}
+      {% else %}
+        <span class="note">（至少 {{ q.min_words }} 字）</span>
+        {% if q.note %}<span class="note">{{ q.note }}</span>{% endif %}
+        <textarea name="q{{ q.id }}" placeholder="在此输入你的回答…">{{ q.previous }}</textarea>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </form>
+</div>
+
+{% endblock %}
+
+{% block bottombar %}
+<div class="bottombar">
+  <div class="bottombar__in">
+    <button class="btn" type="submit" form="review-form">
+      提交审核
+      <svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+      </svg>
+    </button>
+  </div>
+</div>
+{% endblock %}

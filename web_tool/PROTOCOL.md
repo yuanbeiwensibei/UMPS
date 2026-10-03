@@ -45,14 +45,21 @@
 |------|------|
 | `mailer` | 发送方：`"web"` / `"umps"` |
 | `Recipient` | 接收方：`"umps"` / `"web"`（中转站据此路由） |
-| `web_mail` | **web 专用负载**，用 `post_type` 区分消息类型（见第 3 节） |
-| `umps_mail` / `ai_mail` / `minecraft_mail` / `napcat_mail` | web 端不使用，恒为空 |
+| `web_mail` | web 程序专用槽：**web → umps 的内容**放这里（ums 读它） |
+| `umps_mail` | umps 程序专用槽：**umps → web 的内容**放这里（web 读它） |
+| `ai_mail` / `minecraft_mail` / `napcat_mail` | 其他程序的槽，web 端不涉及，恒为空 |
 | `minecraft_online` | 由中转站回填真实状态，web 不关心 |
 | `mail_id` | 消息唯一 id，便于日志追踪 |
 
 ---
 
-## 3. web_mail 协议（web 专用槽）
+## 3. web ↔ umps 消息协议（槽位约定）
+
+> **槽位约定（全系统通用，务必遵守）**：邮件里每个 `xxx_mail` 槽对应一个程序，**谁发消息，就填谁的槽**；接收方读「发送方」的槽。
+> - `umps → web`：ums 把内容填在 `umps_mail`，**web 读 `umps_mail`**
+> - `web → umps`：web 把内容填在 `web_mail`，ums 读 `web_mail`
+>
+> 因此下文每种消息标注了「方向」和「放哪个槽」，写插件时别读错槽。
 
 **核心约定：`qq` 贯穿全程** —— umps 请求开链接时一定带 `qq`，web 返回链接、交答题卡时也一定带 `qq`，这样 umps 拿到任何回信都能直接知道是哪个玩家。
 
@@ -256,3 +263,17 @@ pip install -r web_site/requirements.txt   # Django==6.1.1 + websockets==17.1
 | `web_tool/review.py` | 审核插件（协议常量 + 会话 + 校验 + 提交） |
 | `web_tool/questions.py` | 17 道审核题 |
 | `web_site/` | Django 页面项目（审核页渲染 + 收提交） |
+
+---
+
+## 9. 页面模板约定（移动优先）
+
+**以后新增网页，一律先写移动版。**
+
+- 每个页面提供两套模板，放在 `web_site/audit/templates/audit/`：
+  - **移动版**：`<name>_mobile.html`，继承 `base_mobile.html`（主路径 —— 审核链接由 QQ 发给玩家，基本用手机打开）
+  - **桌面版**：`<name>.html`，继承 `base.html`
+- 视图用 `web_site/audit/views.py` 的 `_tpl(request, name)` 按 `User-Agent` 自动选版本（移动端 → `_mobile`）。加新页面时照此接入，两个模板名都提供即可。
+- **风格统一用「孟菲斯绿色主题」**：单色绿 + 黑色硬阴影（`box-shadow: Npx Npx 0 0 var(--ink)`）+ 粗描边（`border: 2px solid var(--ink)`）+ 回弹动画（`cubic-bezier(.34,1.56,.64,1)`）+ 几何背景装饰。设计令牌见 `base_mobile.html` / `base.html` 顶部的 `:root`。
+- 移动版要点：`viewport-fit=cover` + `env(safe-area-inset-*)` 适配刘海屏；顶部固定栏（品牌 + 已答计数 + 滚动进度）；底部固定提交栏（拇指可达）；选项行触控目标足够大；`font-size ≥ 16px` 防 iOS 自动缩放；尊重 `prefers-reduced-motion`。
+- 示例：审核页 = `base_mobile.html` + `review_mobile.html` / `result_mobile.html` / `error_mobile.html`。

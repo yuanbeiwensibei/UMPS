@@ -49,7 +49,9 @@ def _handle_mail(mail):
             for m in items:
                 outbox.put(m)
             return
-    log.debug("邮件未被任何插件处理: %s", mail.get("web_mail", {}).get("post_type"))
+    wm = mail.get("web_mail")
+    ptype = wm.get("post_type") if isinstance(wm, dict) else None
+    log.debug("邮件未被任何插件处理: %s", ptype)
 
 
 def _flush(ws):
@@ -61,8 +63,9 @@ def _flush(ws):
             return
         try:
             ws.send(json.dumps(mail, ensure_ascii=False))
-            log.info("已发送 %s -> %s",
-                     mail.get("web_mail", {}).get("post_type"), mail.get("Recipient"))
+            wm = mail.get("web_mail")
+            ptype = wm.get("post_type") if isinstance(wm, dict) else None
+            log.info("已发送 %s -> %s", ptype, mail.get("Recipient"))
         except Exception:
             outbox.put(mail)  # 发送失败放回，重连后再发
             return

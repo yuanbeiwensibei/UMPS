@@ -187,12 +187,14 @@ def review(mail):
     
     '''
     try:
-        answers = mail["web_mail"]["answers"]
+        um = mail["umps_mail"]
+        answers = um["answers"]
+        qq = um.get("qq")
     except Exception as e:
         print(f'出现错误：{e}')
         return False
 
-    # 答案映射：是→a, 否→b, A→a, B→b, C→c, D→d，问答题保持原文
+    # 答题卡拼成文本：是→a, 否→b, A→a, B→b, C→c, D→d，问答题保持原文
     value_map = {"是": "a", "否": "b", "A": "a", "B": "b", "C": "c", "D": "d"}
     answers_str = "\n".join(
         f"第{a['question_id']}题: {value_map.get(a['answer'], a['answer'])}"
@@ -202,8 +204,11 @@ def review(mail):
     re = ai(System_prompt_words=System_prompt_words, answers=answers_str)
     if re == False:
         return False
-    else:
-        return re
+
+    # 把 QQ 带进审核结果，方便 umps 识别这份结果属于谁
+    if isinstance(re, dict):
+        re["qq"] = qq
+    return re
 
 
 
@@ -334,8 +339,8 @@ def ai(System_prompt_words, answers):
             "base_url": "https://api.siliconflow.cn/v1",
         },
         {
-            "model": "deepseek-v4-pro",
-            "api_key": "sk-c9a3af7740a34fcbbfa373fb56f4539b",
+            "model": "deepseek-flash",
+            "api_key": "sk-f99e4035c2d043cba402e3021f39d192",
             "base_url": "https://api.deepseek.com",
         },
     ]

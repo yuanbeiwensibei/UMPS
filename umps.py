@@ -132,10 +132,15 @@ async def timing():
 
 
 async def main():
+    print(1)
     File_Check()
+    print(2)
     asyncio.create_task(send())
+    print(3)
     asyncio.create_task(deal_with())
+    print(4)
     asyncio.create_task(timing())
+    print(5)
     await websocket()
 
 

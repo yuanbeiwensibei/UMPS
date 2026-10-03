@@ -23,6 +23,16 @@ register_list_operate(2,qq)
 register_list_operate(3,qq)
 输出：Ture->已审核/false->未审核
 
+适用于新玩家的审核文件写入
+register_list_operate(4,review_data)
+输出：Ture->成功/false->失败
+review_data = {
+        "passed": passed,
+        "reason": reason,
+        "score_m": score_m,
+        "score_q": score_q,
+        "qq": qq
+    }
 
 
 =====
@@ -47,13 +57,31 @@ def register_list_operate(code,content):
                 return True
             else:
                 return False
-
+    #查询有没有审核记录
     if code == 3 and content != "":
         file_path = os.path.join("./UMPs/PlayerData/ReviewData", f"{content}.txt")
         if os.path.exists(file_path):
             return True
         else:
             return False
+
+    #向审核文件写入数据
+    if code == 4 and content != "":
+        qq = content["qq"]
+        review_data = {
+            "passed": content["passed"],
+            "reason": content["reason"],
+            "score_m": content["score_m"],
+            "score_q": content["score_q"],
+        }
+        try:
+            with open(f"./UMPs/PlayerData/ReviewData/{qq}.json", "w", encoding="utf-8") as f:
+                json.dump(review_data, f, ensure_ascii=False, indent=4)
+        except:
+            return False
+        return True
+
+
 
 
 

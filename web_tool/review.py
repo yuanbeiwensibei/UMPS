@@ -93,10 +93,14 @@ def mark_submitted(link_id):
 
 # ── 插件入口 ────────────────────────────────────────────────
 def review(mail):
-    """处理 umps 发来的 mail。仅处理 open_review_link，其余返回 None。"""
+    """处理 umps 发来的 mail。仅处理 open_review_link，其余返回 None。
+
+    注意：ums 发来的内容放在 umps_mail 槽（mailer 填自己的槽，全系统约定），
+    因此这里读 umps_mail；web 回信时则填 web_mail 槽（见 _build_mail）。
+    """
     if mail.get("Recipient") != "web":
         return None
-    wm = mail.get("web_mail") or {}
+    wm = mail.get("umps_mail") or {}
     if wm.get("post_type") != OPEN_REVIEW_LINK:
         return None
 
