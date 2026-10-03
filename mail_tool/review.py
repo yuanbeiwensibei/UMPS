@@ -33,7 +33,8 @@ def napcat(mail):
             data = {
                 "action": "send_msg",
                 "target": qq,
-                "text": "无法二次审核"
+                "group_id": 594051605,
+                "text": "不能二次审核"
             }
             mail["mailer"],mail["Recipient"],mail["umps_mail"] = "umps","napcat",data
             return mail
@@ -41,7 +42,7 @@ def napcat(mail):
         #====因为在群聊中发送"开始审核"被拒绝====
         if mail["napcat_mail"]["event_type"] == "message.group":
             data = {
-                "action": "send_msg",
+                "action": "send_group_msg",
                 "target": mail["napcat_mail"]["group_id"],
                 "text": "此命令不能在群聊使用\n请点击我的头像与我私聊"
             }
@@ -69,12 +70,13 @@ def napcat(mail):
 
 
 def web(mail):
-    qq = mail["web_mail"]["sender_qq"]
+    qq = mail["web_mail"]["qq"]
     # ====收到返回的链接，发送到QQ====
     if mail.get('web_mail', {}).get('post_type') == "review_link_ready":
         data = {
             "action": "send_msg",
             "target": qq,
+            "group_id": 594051605,
             "text": f"请将下面的链接复制到浏览器打开进行审核➡\n{mail["web_mail"]["url"]}\n链接30分钟内有效"
         }
         mail["mailer"], mail["Recipient"], mail["umps_mail"] = "umps", "napcat", data
@@ -87,6 +89,7 @@ def web(mail):
             data = {
                 "action": "send_msg",
                 "target": qq,
+                "group_id": 594051605,
                 "text": "我刚刚收到了你的一份答题卡，但是因为你已经接受过审核了，因此我不会处理这份答题卡"
             }
             mail["mailer"], mail["Recipient"], mail["umps_mail"] = "umps", "napcat", data
@@ -94,7 +97,7 @@ def web(mail):
 
         #====创建评审空文件并送检====
         with open(f"./UMPs/PlayerData/ReviewData/{qq}.json", "w", encoding="utf-8") as f:
-            json.dump("", f, ensure_ascii=False, indent=4)
+            json.dump({"answer_sheet": mail.get('web_mail', {}).get('answers')}, f, ensure_ascii=False, indent=4)
         data = {
             "post_type": "Correction_the_review",
             "answers": mail.get('web_mail', {}).get('answers'),
@@ -105,23 +108,32 @@ def web(mail):
 
 
 def ai(mail):
-    ai = mail["ai_mail"]
+    ai_re = mail["ai_mail"]
     #====判卷失败，提示玩家转人工====
-    if ai is False:
+    if ai_re.get("error") is True:
         data = {
             "action": "send_msg",
-            "target": ai["qq"],
+            "target": ai_re["qq"],
             "group_id": 594051605,
             "text": "自动审核出现错误，已转交至人工审核"
         }
+        try:
+            register_list_operate(5, ai_re["qq"])
+        except:
+            data = {
+                "action": "send_msg",
+                "target": ai_re["qq"],
+                "group_id": 594051605,
+                "text": "审核出现重大错误，请联系管理员处理"
+            }
         mail["mailer"], mail["Recipient"], mail["umps_mail"] = "umps", "napcat", data
         return mail
     #开始评卷
-    qq = ai["qq"]  # 谁
-    passed = ai["是否通过"]  # 审核结果
-    reason = ai["评判理由"]
-    score_m = ai["选择题总分"]
-    score_q = ai["问答题总分"]
+    qq = ai_re["qq"]  # 谁
+    passed = ai_re["是否通过"]  # 审核结果
+    reason = ai_re["评判理由"]
+    score_m = ai_re["选择题总分"]
+    score_q = ai_re["问答题总分"]
     review_data = {
         "passed": passed,
         "reason": reason,
@@ -130,15 +142,49 @@ def ai(mail):
         "qq": qq
     }
     #====保存答题卡时出错====
-    if register_list_operate(4, review_data) is False:
+    re = register_list_operate(4, review_data)
+    if re is False:
         data = {
             "action": "send_msg",
             "target": qq,
             "group_id": 594051605,
-            "text": "出错了，在尝试保存答题卡时出现错误，请联系管理员和餐食解决"
+            "text": "在尝试保存答题卡时出现错误，请联系管理员尝试"
         }
         mail["mailer"], mail["Recipient"], mail["umps_mail"] = "umps", "napcat", data
         return mail
+    #====ai审核通过====
+    if passed is True:
+        data = {
+            "action": "send_msg",
+            "target": qq,
+            "group_id": 594051605,
+            "text": "恭喜你通过服务器的审核！\n加入大群->1036440930\n一定要先看公告哦"
+        }
+        mail["mailer"], mail["Recipient"], mail["umps_mail"] = "umps", "napcat", data
+        return mail
+    #====ai审核不通过，转移人工====
+    if passed is False:
+        re = register_list_operate(5, qq)
+        #添加人工审核名单纯出错
+        if re is False:
+            data = {
+                "action": "send_msg",
+                "target": qq,
+                "group_id": 594051605,
+                "text": "在尝试保存答题卡时出现错误，请联系管理员尝试\n且你没有通过初审"
+            }
+            mail["mailer"], mail["Recipient"], mail["umps_mail"] = "umps", "napcat", data
+            return mail
+        #正常进行
+        data = {
+            "action": "send_msg",
+            "target": qq,
+            "group_id": 594051605,
+            "text": "你的答题初审并没有通过，接下来会送至人工审核\n审核通常在24h内完成，请耐心等待"
+        }
+        mail["mailer"], mail["Recipient"], mail["umps_mail"] = "umps", "napcat", data
+        return mail
+
 
 
 

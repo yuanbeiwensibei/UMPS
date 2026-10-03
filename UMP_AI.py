@@ -186,13 +186,15 @@ def review(mail):
     请仅输出这个JSON本身，不要用代码块包裹，不要加额外文字
     
     '''
+    um = mail.get("umps_mail") or {}
+    qq = um.get("qq")
     try:
-        um = mail["umps_mail"]
         answers = um["answers"]
-        qq = um.get("qq")
     except Exception as e:
         print(f'出现错误：{e}')
-        return False
+        # 无论如何都带回 qq，方便 umps 通知玩家
+        return {"qq": qq, "是否通过": False, "选择题总分": 0, "问答题总分": 0,
+                "评判理由": "答题卡解析失败，已转人工审核", "error": True}
 
     # 答题卡拼成文本：是→a, 否→b, A→a, B→b, C→c, D→d，问答题保持原文
     value_map = {"是": "a", "否": "b", "A": "a", "B": "b", "C": "c", "D": "d"}
@@ -203,7 +205,9 @@ def review(mail):
 
     re = ai(System_prompt_words=System_prompt_words, answers=answers_str)
     if re == False:
-        return False
+        # 判卷失败也带回 qq + 失败标记（error=True）
+        return {"qq": qq, "是否通过": False, "选择题总分": 0, "问答题总分": 0,
+                "评判理由": "自动判卷失败，已转人工审核", "error": True}
 
     # 把 QQ 带进审核结果，方便 umps 识别这份结果属于谁
     if isinstance(re, dict):
@@ -332,6 +336,11 @@ def ai(System_prompt_words, answers):
             "model": "deepseek-ai/DeepSeek-V3.2",
             "api_key": "sk-emdjskolyavuaqtwmlbpmycxszwnutrgsdtktnkqyxwurwxs",
             "base_url": "https://api.siliconflow.cn/v1",
+        },
+        {
+            "model": "[次]deepseek-v4-flash",
+            "api_key": "sk-ADtSnkkEkZj99GCad8PU2hPtzLuqufvQ36SARoXArFgYUflA",
+            "base_url": "https://api.gemai.cc/v1",
         },
         {
             "model": "deepseek-ai/DeepSeek-V3",

@@ -4,13 +4,14 @@ UMPs总文件夹
 ----binding.yml uuid-qq的绑定查询文件
 ----ban.yml 封禁用户littleskinUID,QQ
 ----config.yml 设置文件
-----PlayerData  玩家数据文件夹
---------[QQ].json  玩家数据
+----PlayerData  玩家数据
+--------PlayerData  玩家数据目录
+--------ReviewData  审核数据目录
 ----review.yml  审核文件-被移出
 ----Review_failed.yml  审核失败记录-被移出
 ----Unexecuted_instructions.yml  未执行指令
 ----afdian.yml  爱发电记录
-----Review  审核相关文件夹
+----manually_review.yml #待人工审核名单
 '''
 
 
@@ -50,6 +51,8 @@ def File_Check():
             yaml.dump([], f, default_flow_style=False, allow_unicode=True)
         with open('./UMPs/afdian.yml', 'w', encoding='utf-8') as f:
             yaml.dump({"out_trade_no": [], "sku": {}, "count": {}, "vip_player": []}, f, default_flow_style=False, allow_unicode=True)
+        with open('./UMPs/manually_review.yml', 'w', encoding='utf-8') as f:
+            yaml.dump([], f, default_flow_style=False, allow_unicode=True)
 
         os.makedirs('./UMPs/PlayerData', exist_ok=True)
         os.makedirs('./UMPs/PlayerData/PlayerData', exist_ok=True)
@@ -106,6 +109,11 @@ def File_Check():
         with open('./UMPs/afdian.yml', 'w', encoding='utf-8') as f:
             yaml.dump({"out_trade_no": [], "sku": {}, "count": {}, "vip_player": []}, f, default_flow_style=False, allow_unicode=True)
 
+    if os.path.exists("./UMPs/manually_review.yml"):
+        pass
+    else:
+        with open('./UMPs/manually_review.yml', 'w', encoding='utf-8') as f:
+            yaml.dump([], f, default_flow_style=False, allow_unicode=True)
     # ── 目录检查 ──────────────────────────────────────────
 
     if os.path.exists("./UMPs/PlayerData"):
@@ -121,3 +129,7 @@ def File_Check():
         pass
     else:
         os.makedirs('./UMPs/PlayerData/ReviewData', exist_ok=True)
+    if os.path.exists("./UMPs/manually_review"):
+        pass
+    else:
+        os.makedirs('./UMPs/manually_review', exist_ok=True)

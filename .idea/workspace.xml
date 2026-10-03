@@ -6,21 +6,19 @@
   <component name="ChangeListManager">
     <list default="true" id="61ddc286-d919-4919-a19c-8c597824c59f" name="更改" comment="umps重构">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.reasonix/desktop-topic-auto-title-meta.json" beforeDir="false" afterPath="$PROJECT_DIR$/.reasonix/desktop-topic-auto-title-meta.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.reasonix/desktop-topic-title-sources.json" beforeDir="false" afterPath="$PROJECT_DIR$/.reasonix/desktop-topic-title-sources.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.reasonix/desktop-topic-titles.json" beforeDir="false" afterPath="$PROJECT_DIR$/.reasonix/desktop-topic-titles.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UMP_AI.py" beforeDir="false" afterPath="$PROJECT_DIR$/UMP_AI.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UMPs/Review_failed.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UMPs/Unexecuted_instructions.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UMPs/afdian.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UMPs/ban.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UMPs/binding.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UMPs/config.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UMPs/register_list.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UMPs/review.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UMPs/title_next_id.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/mail_tool/File_Check.py" beforeDir="false" afterPath="$PROJECT_DIR$/mail_tool/File_Check.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mail_tool/player_data_management.py" beforeDir="false" afterPath="$PROJECT_DIR$/mail_tool/player_data_management.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mail_tool/review.py" beforeDir="false" afterPath="$PROJECT_DIR$/mail_tool/review.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/umps.py" beforeDir="false" afterPath="$PROJECT_DIR$/umps.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web.py" beforeDir="false" afterPath="$PROJECT_DIR$/web.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_site/audit/templates/audit/error.html" beforeDir="false" afterPath="$PROJECT_DIR$/web_site/audit/templates/audit/error.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_site/audit/templates/audit/result.html" beforeDir="false" afterPath="$PROJECT_DIR$/web_site/audit/templates/audit/result.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_site/audit/templates/audit/review.html" beforeDir="false" afterPath="$PROJECT_DIR$/web_site/audit/templates/audit/review.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_site/audit/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_site/audit/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_tool/PROTOCOL.md" beforeDir="false" afterPath="$PROJECT_DIR$/web_tool/PROTOCOL.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_tool/review.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_tool/review.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,7 +26,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="84" />
+    <option name="cachedIndexableFilesCount" value="90" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -70,33 +68,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.File_Check.executor": "Debug",
-    "Python.TS.executor": "Run",
-    "Python.TS2.executor": "Run",
-    "Python.napcat_client.executor": "Run",
-    "Python.review.executor": "Run",
-    "Python.umps.executor": "Run",
-    "Python.web.executor": "Run",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "ml.llm.AcpAgentsConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.File_Check.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.TS.executor&quot;: &quot;Run&quot;,
+    &quot;Python.TS2.executor&quot;: &quot;Run&quot;,
+    &quot;Python.UMP_AI.executor&quot;: &quot;Run&quot;,
+    &quot;Python.napcat_client.executor&quot;: &quot;Run&quot;,
+    &quot;Python.review.executor&quot;: &quot;Run&quot;,
+    &quot;Python.umps.executor&quot;: &quot;Run&quot;,
+    &quot;Python.web.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;ml.llm.AcpAgentsConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
-  <component name="RunManager" selected="Python.web">
+}</component>
+  <component name="RunManager" selected="Python.umps">
     <configuration name="TS2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="UMPS" />
       <option name="ENV_FILES" value="" />
@@ -121,6 +120,30 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="UMP_AI" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="UMPS" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="RUN_TOOL" value="" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/UMP_AI.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="napcat_client" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="UMPS" />
       <option name="ENV_FILES" value="" />
@@ -137,30 +160,6 @@
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="RUN_TOOL" value="" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/napcat_client.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="review" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="UMPS" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/mail_tool" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="RUN_TOOL" value="" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/mail_tool/review.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -219,11 +218,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.web" />
-        <item itemvalue="Python.TS2" />
         <item itemvalue="Python.umps" />
         <item itemvalue="Python.napcat_client" />
-        <item itemvalue="Python.review" />
+        <item itemvalue="Python.TS2" />
+        <item itemvalue="Python.UMP_AI" />
+        <item itemvalue="Python.web" />
       </list>
     </recent_temporary>
   </component>
@@ -250,7 +249,8 @@
       <workItem from="1790928128896" duration="7670000" />
       <workItem from="1790990745827" duration="1019000" />
       <workItem from="1790992606138" duration="7124000" />
-      <workItem from="1791004857667" duration="6532000" />
+      <workItem from="1791004857667" duration="11432000" />
+      <workItem from="1791018679674" duration="1490000" />
     </task>
     <task id="LOCAL-00001" summary="umps重构">
       <option name="closed" value="true" />
@@ -284,7 +284,15 @@
       <option name="project" value="LOCAL" />
       <updated>1791003408074</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="umps重构">
+      <option name="closed" value="true" />
+      <created>1791011444397</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1791011444397</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -329,11 +337,12 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/UMPS$TS.coverage" NAME="TS 覆盖结果" MODIFIED="1790938876049" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/UMPS$napcat_client.coverage" NAME="napcat_client 覆盖结果" MODIFIED="1791004905459" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/UMPS$TS2.coverage" NAME="TS2 覆盖结果" MODIFIED="1791009498884" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/UMPS$napcat_client.coverage" NAME="napcat_client 覆盖结果" MODIFIED="1791018697697" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/UMPS$TS2.coverage" NAME="TS2 覆盖结果" MODIFIED="1791018696403" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/UMPS$review.coverage" NAME="review 覆盖结果" MODIFIED="1791004881848" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/mail_tool" />
+    <SUITE FILE_PATH="coverage/UMPS$UMP_AI.coverage" NAME="UMP_AI 覆盖结果" MODIFIED="1791018692209" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/UMPS$File_Check.coverage" NAME="File_Check 覆盖结果" MODIFIED="1791004168513" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/mail_tool" />
-    <SUITE FILE_PATH="coverage/UMPS$web.coverage" NAME="web 覆盖结果" MODIFIED="1791009515003" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/UMPS$umps.coverage" NAME="umps 覆盖结果" MODIFIED="1791005760626" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/UMPS$web.coverage" NAME="web 覆盖结果" MODIFIED="1791018689047" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/UMPS$umps.coverage" NAME="umps 覆盖结果" MODIFIED="1791019475263" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
