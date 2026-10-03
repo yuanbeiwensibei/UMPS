@@ -6,8 +6,8 @@ UMPs总文件夹
 ----config.yml 设置文件
 ----PlayerData  玩家数据文件夹
 --------[QQ].json  玩家数据
-----review.yml  审核文件
-----Review_failed.yml  审核失败记录
+----review.yml  审核文件-被移出
+----Review_failed.yml  审核失败记录-被移出
 ----Unexecuted_instructions.yml  未执行指令
 ----afdian.yml  爱发电记录
 ----Review  审核相关文件夹
@@ -40,16 +40,20 @@ def File_Check():
             yaml.dump({"littleskin_uuid": [], "qq": []}, f, default_flow_style=False, allow_unicode=True)
         with open('./UMPs/config.yml', 'w', encoding='utf-8') as f:
             yaml.dump(data, f, default_flow_style=False, allow_unicode=True)
+        """
         with open('./UMPs/review.yml', 'w', encoding='utf-8') as f:
             yaml.dump([], f, default_flow_style=False, allow_unicode=True)
         with open('./UMPs/Review_failed.yml', 'w', encoding='utf-8') as f:
             yaml.dump([], f, default_flow_style=False, allow_unicode=True)
+        """
         with open('./UMPs/Unexecuted_instructions.yml', 'w', encoding='utf-8') as f:
             yaml.dump([], f, default_flow_style=False, allow_unicode=True)
         with open('./UMPs/afdian.yml', 'w', encoding='utf-8') as f:
             yaml.dump({"out_trade_no": [], "sku": {}, "count": {}, "vip_player": []}, f, default_flow_style=False, allow_unicode=True)
 
         os.makedirs('./UMPs/PlayerData', exist_ok=True)
+        os.makedirs('./UMPs/PlayerData/PlayerData', exist_ok=True)
+        os.makedirs('./UMPs/PlayerData/ReviewData', exist_ok=True)
         os.makedirs('./UMPs/Review', exist_ok=True)
 
     # ── 逐个文件检查，缺哪个补哪个 ────────────────────────

@@ -1,0 +1,4 @@
+# UMPS web 端（web.py + web_site）依赖
+# 安装：pip install -r requirements.txt
+Django==6.1.1
+websockets==17.1

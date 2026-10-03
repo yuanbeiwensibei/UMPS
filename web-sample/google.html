@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Green Search · Google 风格样本</title>
+<style>
+  /* ============ Material 3 色板（绿色主题 + 中性色） ============ */
+  :root{
+    --primary:              #146C43;
+    --on-primary:           #FFFFFF;
+    --primary-container:    #A9F2C9;
+    --on-primary-container: #00210E;
+
+    --secondary:            #4E6356;
+    --secondary-container:  #D1E8DA;
+    --on-secondary-container:#0C1F14;
+
+    --surface:              #FBFDFA;
+    --surface-container:    #EFF3EE;
+    --surface-container-high:#E9EDE8;
+
+    --on-surface:           #191C1A;
+    --on-surface-variant:   #404943;
+
+    --outline:              #707973;
+    --outline-variant:      #C0C8C1;
+
+    --green-500:            #34A853;   /* Google 绿（点缀用） */
+    --blue-500:             #4285F4;
+    --red-500:              #EA4335;
+    --yellow-500:           #FBBC05;
+
+    /* Material 3 elevation 阴影（带绿色调） */
+    --e1: 0 1px 2px rgba(20,60,40,.12), 0 1px 3px rgba(20,60,40,.08);
+    --e2: 0 1px 2px rgba(20,60,40,.08), 0 2px 6px rgba(20,60,40,.10);
+    --e3: 0 4px 8px rgba(20,60,40,.07), 0 8px 18px rgba(20,60,40,.10);
+    --e4: 0 6px 14px rgba(20,60,40,.09), 0 14px 32px rgba(20,60,40,.13);
+
+    /* Material 缓动 */
+    --ease-standard:  cubic-bezier(.2,0,0,1);
+    --ease-emphasized:cubic-bezier(.2,0,0,1);
+    --ease-spring:    cubic-bezier(.3,1.4,.6,1);
+
+    --radius-s: 10px;
+    --radius:   16px;
+    --radius-l: 28px;
+    --appbar-h: 64px;
+  }
+
+  *,*::before,*::after{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    background:var(--surface);
+    color:var(--on-surface);
+    font-family:"Google Sans", Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI",
+                "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+    font-size:15px; line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  h1,h2,h3{ margin:0; line-height:1.2; letter-spacing:-.015em; }
+  p{ margin:0; }
+  a{ color:inherit; text-decoration:none; }
+  svg{ display:block; }
+  ::selection{ background:var(--primary-container); color:var(--on-primary-container); }
+
+  .wrap{ width:min(1120px, 100% - 48px); margin-inline:auto; }
+
+  .icon{ width:22px; height:22px; fill:none; stroke:currentColor; stroke-width:2;
+         stroke-linecap:round; stroke-linejoin:round; flex:none; }
+
+  /* ============ App Bar ============ */
+  .appbar{
+    position:fixed; top:0; left:0; right:0; height:var(--appbar-h); z-index:50;
+    background:var(--surface);
+    transition:box-shadow .3s var(--ease-standard);
+  }
+  .appbar.is-scrolled{ box-shadow:var(--e2); }
+  .appbar__inner{
+    width:min(1120px, 100% - 48px); height:100%; margin-inline:auto;
+    display:flex; align-items:center; gap:18px;
+  }
+
+  .logo{ display:flex; align-items:center; gap:10px; font-weight:500; font-size:19px; letter-spacing:-.01em; }
+  .logo__g{ width:30px; height:30px; }
+
+  .search{
+    flex:1; max-width:620px; margin-inline:auto;
+    display:flex; align-items:center; gap:10px;
+    height:46px; padding:0 8px 0 18px;
+    background:var(--surface-container);
+    border:1px solid transparent; border-radius:999px;
+    color:var(--on-surface-variant);
+    transition:background .2s var(--ease-standard), box-shadow .2s var(--ease-standard),
+               border-color .2s var(--ease-standard);
+  }
+  .search:hover{ background:var(--surface-container-high); }
+  .search:focus-within{
+    background:var(--surface);
+    box-shadow:var(--e3); border-color:var(--primary);
+  }
+  .search input{
+    flex:1; border:0; outline:0; background:transparent;
+    font:inherit; color:var(--on-surface); min-width:0;
+  }
+  .search input::placeholder{ color:var(--outline); }
+  .search .search-btn{
+    width:34px; height:34px; border:0; border-radius:50%;
+    display:grid; place-items:center; cursor:pointer;
+    color:var(--on-surface-variant); background:transparent;
+    transition:background .2s var(--ease-standard);
+  }
+  .search .search-btn:hover{ background:var(--primary-container); color:var(--on-primary-container); }
+
+  .appbar__actions{ display:flex; align-items:center; gap:6px; margin-left:auto; }
+  .icon-btn{
+    position:relative; width:40px; height:40px; border:0; border-radius:50%;
+    display:grid; place-items:center; cursor:pointer;
+    background:transparent; color:var(--on-surface-variant);
+    transition:background .2s var(--ease-standard);
+  }
+  .icon-btn:hover{ background:var(--surface-container-high); }
+  .avatar{
+    width:34px; height:34px; border-radius:50%;
+    background:linear-gradient(140deg, var(--primary), var(--green-500));
+    display:grid; place-items:center; color:#fff; font-weight:600; font-size:14px;
+    margin-left:4px; cursor:pointer;
+  }
+
+  /* ============ 涟漪 ============ */
+  .ripple{ position:relative; overflow:hidden; }
+  .ripple__wave{
+    position:absolute; border-radius:50%; background:currentColor;
+    opacity:.16; transform:scale(0); pointer-events:none;
+    animation:ripple .55s var(--ease-standard) forwards;
+  }
+  @keyframes ripple{ to{ transform:scale(1); opacity:0; } }
+
+  /* ============ Hero ============ */
+  .hero{
+    padding:104px 0 40px; text-align:center;
+    background:
+      radial-gradient(46rem 20rem at 50% -8rem, var(--primary-container), transparent 70%);
+  }
+  .hero__logo{ width:74px; height:74px; margin:0 auto 26px; }
+  .hero h1{
+    font-size:clamp(34px, 5vw, 60px); font-weight:500; letter-spacing:-.03em;
+  }
+  .hero h1 em{
+    font-style:normal;
+    background:linear-gradient(120deg, var(--primary), var(--green-500));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero p{
+    margin:18px auto 0; max-width:52ch; font-size:17px; color:var(--on-surface-variant);
+  }
+
+  .hero-search{
+    max-width:620px; margin:34px auto 0;
+    display:flex; align-items:center; gap:8px;
+    height:56px; padding:0 10px 0 22px;
+    background:var(--surface); border-radius:999px; box-shadow:var(--e3);
+    border:1px solid var(--outline-variant);
+    transition:box-shadow .25s var(--ease-standard);
+  }
+  .hero-search:hover{ box-shadow:var(--e4); }
+  .hero-search input{
+    flex:1; border:0; outline:0; background:transparent;
+    font:inherit; font-size:16px; color:var(--on-surface); min-width:0;
+  }
+  .hero-search .mic{
+    width:38px; height:38px; border:0; border-radius:50%; cursor:pointer;
+    display:grid; place-items:center; background:transparent;
+    color:var(--primary); transition:background .2s var(--ease-standard);
+  }
+  .hero-search .mic:hover{ background:var(--primary-container); }
+
+  .chips{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:26px; }
+  .chip{
+    display:inline-flex; align-items:center; gap:7px;
+    height:32px; padding:0 16px; border-radius:8px;
+    border:1px solid var(--outline-variant); background:var(--surface);
+    font-size:13.5px; font-weight:500; color:var(--on-surface-variant); cursor:pointer;
+    transition:background .2s var(--ease-standard), border-color .2s var(--ease-standard), color .2s var(--ease-standard);
+  }
+  .chip:hover{ background:var(--surface-container-high); }
+  .chip.is-on{
+    background:var(--secondary-container); border-color:transparent;
+    color:var(--on-secondary-container);
+  }
+
+  /* ============ 区块标题 ============ */
+  .section{ padding:64px 0; }
+  .head{ display:flex; align-items:baseline; gap:16px; margin-bottom:28px; }
+  .head h2{ font-size:clamp(22px, 3vw, 30px); font-weight:500; }
+  .head .see-all{
+    margin-left:auto; display:inline-flex; align-items:center; gap:6px;
+    font-size:14px; font-weight:500; color:var(--primary);
+    padding:8px 12px; border-radius:999px; transition:background .2s var(--ease-standard);
+  }
+  .head .see-all:hover{ background:var(--primary-container); }
+
+  /* ============ 卡片网格 ============ */
+  .cards{ display:grid; grid-template-columns:repeat(3, 1fr); gap:18px; }
+  .card{
+    background:var(--surface); border:1px solid var(--outline-variant);
+    border-radius:var(--radius); overflow:hidden;
+    box-shadow:var(--e1);
+    transition:box-shadow .3s var(--ease-standard), transform .3s var(--ease-standard),
+               border-color .3s var(--ease-standard);
+  }
+  .card:hover{
+    box-shadow:var(--e4); transform:translateY(-4px);
+  }
+
+  .card__media{
+    position:relative; height:150px; overflow:hidden;
+    background:linear-gradient(135deg, var(--primary-container), var(--surface-container));
+  }
+  /* 每张卡片的几何装饰（仅用绿色系 + 中性） */
+  .card__media span, .card__media i{ position:absolute; display:block; }
+  .m1 .d1{ width:74px; height:74px; border-radius:22px; background:var(--primary); top:30px; left:40px; }
+  .m1 .d2{ width:40px; height:40px; border-radius:50%; background:var(--green-500); top:64px; left:96px; }
+  .m1 .d3{ width:0; height:0; border-left:34px solid transparent; border-right:34px solid transparent; border-bottom:56px solid var(--on-primary-container); right:42px; bottom:26px; }
+
+  .m2 .d1{ width:120px; height:120px; border-radius:50%; border:16px solid var(--primary); top:12px; left:50%; transform:translateX(-50%); }
+  .m2 .d2{ width:56px; height:56px; background:var(--primary-container); border-radius:50%; right:50px; bottom:20px; }
+  .m3 .d1{ width:110px; height:46px; border-radius:999px; background:var(--primary); top:46px; left:30px; transform:rotate(-12deg); }
+  .m3 .d2{ width:46px; height:46px; border-radius:12px; background:var(--secondary-container); top:40px; right:52px; transform:rotate(24deg); }
+  .m3 .d3{ width:64px; height:64px; border-radius:50%; background:var(--green-500); bottom:16px; left:120px; }
+
+  .m4 .d1{ width:80px; height:80px; background:var(--primary); border-radius:16px; top:28px; left:36px; transform:rotate(-8deg); }
+  .m4 .d2{ width:0; height:0; border-left:40px solid transparent; border-right:40px solid transparent; border-bottom:64px solid var(--green-500); right:38px; top:34px; }
+  .m5 .d1{ width:120px; height:120px; border-radius:50%; background:var(--primary-container); top:14px; right:26px; }
+  .m5 .d2{ width:52px; height:52px; border-radius:50%; background:var(--primary); left:44px; bottom:22px; }
+  .m6 .d1{ width:120px; height:24px; border-radius:999px; background:var(--primary); top:34px; left:28px; }
+  .m6 .d2{ width:90px; height:24px; border-radius:999px; background:var(--secondary-container); top:70px; left:28px; }
+  .m6 .d3{ width:52px; height:52px; border-radius:50%; background:var(--green-500); right:34px; top:36px; }
+
+  .card__body{ padding:18px 20px 16px; }
+  .card__body .tag{
+    font-size:12px; font-weight:500; color:var(--primary);
+  }
+  .card__body h3{ margin-top:6px; font-size:17.5px; font-weight:500; }
+  .card__body p{
+    margin-top:8px; font-size:14px; color:var(--on-surface-variant);
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+  }
+  .card__foot{
+    display:flex; align-items:center; gap:6px; margin-top:16px;
+  }
+  .card__foot .icon-btn{ width:34px; height:34px; }
+  .card__foot .spacer{ margin-left:auto; }
+  .card__foot .heart:hover{ color:var(--red-500); }
+
+  /* ============ 特性（Material 基因） ============ */
+  .features{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:18px;
+  }
+  .feature{
+    padding:28px 26px;
+    background:var(--surface-container); border-radius:var(--radius-l);
+    transition:background .3s var(--ease-standard), transform .3s var(--ease-standard);
+  }
+  .feature:hover{ background:var(--surface-container-high); transform:translateY(-3px); }
+  .feature .f-icon{
+    width:48px; height:48px; border-radius:14px;
+    background:var(--primary-container); color:var(--on-primary-container);
+    display:grid; place-items:center;
+  }
+  .feature h3{ margin-top:18px; font-size:18px; font-weight:500; }
+  .feature p{ margin-top:8px; font-size:14px; color:var(--on-surface-variant); }
+
+  /* ============ 色板展示 ============ */
+  .swatches{ display:flex; gap:0; border-radius:var(--radius); overflow:hidden; box-shadow:var(--e2); }
+  .swatch{ flex:1; height:88px; position:relative; cursor:pointer; transition:flex .35s var(--ease-standard); }
+  .swatch:hover{ flex:1.6; }
+  .swatch span{
+    position:absolute; left:12px; bottom:10px; font-size:11px; font-weight:500;
+    opacity:0; transition:opacity .25s var(--ease-standard);
+  }
+  .swatch:hover span{ opacity:1; }
+  .sw1{ background:var(--primary); }        .sw1 span{ color:#fff; }
+  .sw2{ background:var(--green-500); }       .sw2 span{ color:#fff; }
+  .sw3{ background:var(--primary-container); }.sw3 span{ color:var(--on-primary-container); }
+  .sw4{ background:var(--secondary-container);} .sw4 span{ color:var(--on-secondary-container); }
+  .sw5{ background:var(--surface-container); } .sw5 span{ color:var(--on-surface-variant); }
+  .sw6{ background:var(--surface); border:1px solid var(--outline-variant); } .sw6 span{ color:var(--on-surface-variant); }
+
+  /* ============ CTA ============ */
+  .cta{
+    padding:56px 32px; text-align:center;
+    background:var(--primary-container); border-radius:var(--radius-l);
+    position:relative; overflow:hidden;
+  }
+  .cta h2{ font-size:clamp(24px, 3.6vw, 40px); font-weight:500; }
+  .cta p{ margin:14px auto 30px; max-width:52ch; color:var(--on-primary-container); }
+  .cta__actions{ display:flex; justify-content:center; gap:14px; flex-wrap:wrap; }
+
+  /* ============ Material 按钮 ============ */
+  .mbtn{
+    position:relative; overflow:hidden;
+    display:inline-flex; align-items:center; gap:8px;
+    height:48px; padding:0 26px; border:0; border-radius:999px;
+    font:inherit; font-size:15px; font-weight:500; cursor:pointer;
+    transition:box-shadow .25s var(--ease-standard), background .2s var(--ease-standard),
+               transform .2s var(--ease-standard);
+  }
+  .mbtn:active{ transform:scale(.97); }
+  .mbtn--filled{ background:var(--primary); color:var(--on-primary); }
+  .mbtn--filled:hover{ background:var(--primary); box-shadow:var(--e3); filter:brightness(1.08); }
+  .mbtn--tonal{ background:var(--secondary-container); color:var(--on-secondary-container); }
+  .mbtn--tonal:hover{ box-shadow:var(--e2); }
+  .mbtn--text{ background:transparent; color:var(--primary); padding-inline:18px; }
+  .mbtn--text:hover{ background:rgba(20,108,67,.08); }
+  .mbtn--text .icon{ width:20px; height:20px; }
+
+  /* ============ FAB ============ */
+  .fab{
+    position:fixed; right:26px; bottom:26px; z-index:40;
+    width:56px; height:56px; border:0; border-radius:16px;
+    background:var(--primary-container); color:var(--on-primary-container);
+    box-shadow:var(--e3); cursor:pointer;
+    display:grid; place-items:center;
+    transition:box-shadow .25s var(--ease-standard), background .2s var(--ease-standard),
+               transform .25s var(--ease-standard), opacity .3s var(--ease-standard);
+    opacity:0; pointer-events:none;
+  }
+  .fab.show{ opacity:1; pointer-events:auto; }
+  .fab:hover{ box-shadow:var(--e4); }
+  .fab:active{ transform:scale(.94); }
+  .fab .icon{ width:26px; height:26px; }
+
+  /* ============ 页脚 ============ */
+  .footer{ background:var(--surface-container); padding:44px 0 36px; margin-top:40px; }
+  .footer__cols{ display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:32px; }
+  .footer h4{ margin:0 0 14px; font-size:13px; font-weight:500; color:var(--on-surface-variant); letter-spacing:.02em; }
+  .footer a{ display:block; padding:4px 0; font-size:14px; color:var(--on-surface-variant); transition:color .2s var(--ease-standard); }
+  .footer a:hover{ color:var(--primary); }
+  .footer .logo{ margin-bottom:12px; }
+  .footer .desc{ font-size:13.5px; color:var(--on-surface-variant); max-width:30ch; }
+  .footer__bottom{
+    margin-top:34px; padding-top:20px; border-top:1px solid var(--outline-variant);
+    display:flex; flex-wrap:wrap; gap:14px; justify-content:space-between;
+    font-size:13px; color:var(--on-surface-variant);
+  }
+
+  /* ============ 揭示动画 ============ */
+  [data-reveal]{
+    opacity:0; transform:translateY(22px);
+    transition:opacity .55s var(--ease-standard), transform .55s var(--ease-standard);
+    transition-delay:var(--delay, 0ms);
+  }
+  [data-reveal].is-in{ opacity:1; transform:none; }
+
+  :focus-visible{ outline:3px solid var(--primary); outline-offset:2px; }
+
+  /* ============ 响应式 ============ */
+  @media (max-width: 960px){
+    .cards, .features{ grid-template-columns:repeat(2, 1fr); }
+    .footer__cols{ grid-template-columns:1fr 1fr; }
+    .search{ max-width:none; }
+  }
+  @media (max-width: 640px){
+    .cards, .features{ grid-template-columns:1fr; }
+    .appbar__actions .icon-btn{ display:none; }
+    .wrap, .appbar__inner{ width:min(1120px, 100% - 28px); }
+  }
+
+  /* ============ 降低动效偏好 ============ */
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *,*::before,*::after{
+      animation-duration:.001ms !important; animation-iteration-count:1 !important;
+      transition-duration:.001ms !important;
+    }
+    [data-reveal]{ opacity:1 !important; transform:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ App Bar ============ -->
+<header class="appbar" id="appbar">
+  <div class="appbar__inner">
+    <a class="logo" href="#top">
+      <svg class="logo__g" viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.54-.2-2.27H12v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z"/>
+        <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96H1.29v3.09C3.26 21.3 7.31 24 12 24z"/>
+        <path fill="#FBBC05" d="M5.27 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.62H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.38l3.98-3.09z"/>
+        <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.98 3.09C6.22 6.86 8.87 4.75 12 4.75z"/>
+      </svg>
+      Green Search
+    </a>
+
+    <div class="search">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/>
+      </svg>
+      <input type="search" placeholder="搜索样本、组件或动效…" aria-label="搜索" />
+      <button class="search-btn ripple" aria-label="搜索">
+        <svg class="icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+          <line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="appbar__actions">
+      <button class="icon-btn ripple" aria-label="设置">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/>
+        </svg>
+      </button>
+      <button class="icon-btn ripple" aria-label="通知">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 8a6 6 0 0 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/>
+          <path d="M10.3 21a2 2 0 0 0 3.4 0"/>
+        </svg>
+      </button>
+      <div class="avatar" role="img" aria-label="用户">G</div>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ Hero ============ -->
+  <section class="hero">
+    <svg class="hero__logo" viewBox="0 0 24 24" aria-hidden="true">
+      <path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.54-.2-2.27H12v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z"/>
+      <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96H1.29v3.09C3.26 21.3 7.31 24 12 24z"/>
+      <path fill="#FBBC05" d="M5.27 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.62H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.38l3.98-3.09z"/>
+      <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.98 3.09C6.22 6.86 8.87 4.75 12 4.75z"/>
+    </svg>
+
+    <h1>答案，<em>触手可及</em></h1>
+    <p>一套以 Material Design 3 为骨架、绿色为主题色的界面样本 —— 卡片、阴影、状态层与涟漪，都在呼吸之间。</p>
+
+    <div class="hero-search">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/>
+      </svg>
+      <input type="search" placeholder="搜索绿色主题的组件…" aria-label="搜索" />
+      <button class="mic ripple" aria-label="语音搜索">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="9" y="3" width="6" height="11" rx="3"/>
+          <path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="chips" data-reveal style="--delay:.15s">
+      <span class="chip is-on">全部</span>
+      <span class="chip">设计</span>
+      <span class="chip">组件</span>
+      <span class="chip">动效</span>
+      <span class="chip">搜索</span>
+      <span class="chip">无障碍</span>
+    </div>
+  </section>
+
+  <!-- ============ 内容卡片 ============ -->
+  <section class="section">
+    <div class="wrap">
+      <div class="head" data-reveal>
+        <h2>精选样本</h2>
+        <a class="see-all" href="#top">查看全部
+          <svg class="icon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/>
+          </svg>
+        </a>
+      </div>
+
+      <div class="cards">
+        <article class="card" data-reveal style="--delay:0ms">
+          <div class="card__media m1"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <div class="card__body">
+            <span class="tag">DESIGN</span>
+            <h3>Material 色彩系统</h3>
+            <p>基于色调（tonal）生成的色板，主色、容器色、表面色各司其职。</p>
+            <div class="card__foot">
+              <button class="icon-btn ripple" aria-label="收藏"><svg class="icon heart" viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9-8.5C1.5 9 3 6 6 6c2 0 3 1 4 2.5C11 7 12 6 14 6c3 0 4.5 3 3 6.5-2 4-9 8.5-9 8.5z"/></svg></button>
+              <button class="icon-btn ripple" aria-label="分享"><svg class="icon" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg></button>
+              <span class="spacer"></span>
+              <a class="mbtn mbtn--text" href="#top" style="height:36px;padding-inline:12px;">打开
+                <svg class="icon" width="18" height="18" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" data-reveal style="--delay:.08s">
+          <div class="card__media m2"><span class="d1"></span><span class="d2"></span></div>
+          <div class="card__body">
+            <span class="tag">COMPONENT</span>
+            <h3>组件与状态层</h3>
+            <p>按钮、芯片、卡片共享同一套 hover 状态层与 elevation 阴影。</p>
+            <div class="card__foot">
+              <button class="icon-btn ripple" aria-label="收藏"><svg class="icon heart" viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9-8.5C1.5 9 3 6 6 6c2 0 3 1 4 2.5C11 7 12 6 14 6c3 0 4.5 3 3 6.5-2 4-9 8.5-9 8.5z"/></svg></button>
+              <button class="icon-btn ripple" aria-label="分享"><svg class="icon" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg></button>
+              <span class="spacer"></span>
+              <a class="mbtn mbtn--text" href="#top" style="height:36px;padding-inline:12px;">打开
+                <svg class="icon" width="18" height="18" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" data-reveal style="--delay:.16s">
+          <div class="card__media m3"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <div class="card__body">
+            <span class="tag">MOTION</span>
+            <h3>动效规范</h3>
+            <p>标准、强调、弹性三条缓动曲线，克制地表达状态变化。</p>
+            <div class="card__foot">
+              <button class="icon-btn ripple" aria-label="收藏"><svg class="icon heart" viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9-8.5C1.5 9 3 6 6 6c2 0 3 1 4 2.5C11 7 12 6 14 6c3 0 4.5 3 3 6.5-2 4-9 8.5-9 8.5z"/></svg></button>
+              <button class="icon-btn ripple" aria-label="分享"><svg class="icon" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg></button>
+              <span class="spacer"></span>
+              <a class="mbtn mbtn--text" href="#top" style="height:36px;padding-inline:12px;">打开
+                <svg class="icon" width="18" height="18" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" data-reveal style="--delay:.24s">
+          <div class="card__media m4"><span class="d1"></span><span class="d2"></span></div>
+          <div class="card__body">
+            <span class="tag">LAYOUT</span>
+            <h3>栅格与间距</h3>
+            <p>8dp 基准栅格、响应式断点，让内容在任何屏宽都井然有序。</p>
+            <div class="card__foot">
+              <button class="icon-btn ripple" aria-label="收藏"><svg class="icon heart" viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9-8.5C1.5 9 3 6 6 6c2 0 3 1 4 2.5C11 7 12 6 14 6c3 0 4.5 3 3 6.5-2 4-9 8.5-9 8.5z"/></svg></button>
+              <button class="icon-btn ripple" aria-label="分享"><svg class="icon" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg></button>
+              <span class="spacer"></span>
+              <a class="mbtn mbtn--text" href="#top" style="height:36px;padding-inline:12px;">打开
+                <svg class="icon" width="18" height="18" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" data-reveal style="--delay:.32s">
+          <div class="card__media m5"><span class="d1"></span><span class="d2"></span></div>
+          <div class="card__body">
+            <span class="tag">A11Y</span>
+            <h3>无障碍</h3>
+            <p>对比度、焦点环、语义化标签，让每一个细节都可被感知。</p>
+            <div class="card__foot">
+              <button class="icon-btn ripple" aria-label="收藏"><svg class="icon heart" viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9-8.5C1.5 9 3 6 6 6c2 0 3 1 4 2.5C11 7 12 6 14 6c3 0 4.5 3 3 6.5-2 4-9 8.5-9 8.5z"/></svg></button>
+              <button class="icon-btn ripple" aria-label="分享"><svg class="icon" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg></button>
+              <span class="spacer"></span>
+              <a class="mbtn mbtn--text" href="#top" style="height:36px;padding-inline:12px;">打开
+                <svg class="icon" width="18" height="18" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" data-reveal style="--delay:.4s">
+          <div class="card__media m6"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <div class="card__body">
+            <span class="tag">ICON</span>
+            <h3>图标系统</h3>
+            <p>一套线性圆角图标，配合文字与状态层，语义清晰而统一。</p>
+            <div class="card__foot">
+              <button class="icon-btn ripple" aria-label="收藏"><svg class="icon heart" viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9-8.5C1.5 9 3 6 6 6c2 0 3 1 4 2.5C11 7 12 6 14 6c3 0 4.5 3 3 6.5-2 4-9 8.5-9 8.5z"/></svg></button>
+              <button class="icon-btn ripple" aria-label="分享"><svg class="icon" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg></button>
+              <span class="spacer"></span>
+              <a class="mbtn mbtn--text" href="#top" style="height:36px;padding-inline:12px;">打开
+                <svg class="icon" width="18" height="18" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+              </a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 特性 ============ -->
+  <section class="section" style="padding-top:8px;">
+    <div class="wrap">
+      <div class="head" data-reveal>
+        <h2>Material 的三大基因</h2>
+      </div>
+      <div class="features">
+        <div class="feature" data-reveal style="--delay:0ms">
+          <div class="f-icon">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10z"/><circle cx="12" cy="12" r="2"/></svg>
+          </div>
+          <h3>色彩（Tonal）</h3>
+          <p>用主色推导出 primary、container、surface 的完整色调阶，深浅层次一脉相承。</p>
+        </div>
+        <div class="feature" data-reveal style="--delay:.1s">
+          <div class="f-icon">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg>
+          </div>
+          <h3>组件（Elevation）</h3>
+          <p>四档柔和阴影表达层级，hover 抬升、点击下沉，状态一目了然。</p>
+        </div>
+        <div class="feature" data-reveal style="--delay:.2s">
+          <div class="f-icon">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15c3.5 0 4-9 8-9s4.5 6 8 6"/><path d="M3 19h18"/></svg>
+          </div>
+          <h3>动效（Ripple）</h3>
+          <p>点击涟漪从触点扩散，配合标准缓动，让每一次交互都有迹可循。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 色板 ============ -->
+  <section class="section" style="padding-top:8px;">
+    <div class="wrap">
+      <div class="head" data-reveal>
+        <h2>绿色主题色板</h2>
+        <p style="color:var(--on-surface-variant);font-size:14px;">悬停查看色名 · 同一色相下的明暗阶</p>
+      </div>
+      <div class="swatches" data-reveal>
+        <div class="swatch sw1"><span>Primary #146C43</span></div>
+        <div class="swatch sw2"><span>Green #34A853</span></div>
+        <div class="swatch sw3"><span>Primary Container</span></div>
+        <div class="swatch sw4"><span>Secondary Container</span></div>
+        <div class="swatch sw5"><span>Surface Container</span></div>
+        <div class="swatch sw6"><span>Surface</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <section class="section" style="padding-top:8px;">
+    <div class="wrap">
+      <div class="cta" data-reveal>
+        <h2>想用它，就开始搜索</h2>
+        <p>单文件、零依赖、可离线。把这份绿色主题的 Material 样本放进你的项目，即可开始拼装。</p>
+        <div class="cta__actions">
+          <a class="mbtn mbtn--filled ripple" href="#top">回到顶部</a>
+          <a class="mbtn mbtn--tonal ripple" href="#top">再看一遍</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__cols">
+      <div>
+        <a class="logo" href="#top">
+          <svg class="logo__g" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.54-.2-2.27H12v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z"/>
+            <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96H1.29v3.09C3.26 21.3 7.31 24 12 24z"/>
+            <path fill="#FBBC05" d="M5.27 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.62H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.38l3.98-3.09z"/>
+            <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.98 3.09C6.22 6.86 8.87 4.75 12 4.75z"/>
+          </svg>
+          Green Search
+        </a>
+        <p class="desc">Google 风格界面样本 · 绿色主题 · Material Design 3。</p>
+      </div>
+      <div>
+        <h4>产品</h4>
+        <a href="#top">设计</a><a href="#top">组件</a><a href="#top">动效</a>
+      </div>
+      <div>
+        <h4>资源</h4>
+        <a href="#top">色板</a><a href="#top">图标</a><a href="#top">栅格</a>
+      </div>
+      <div>
+        <h4>关于</h4>
+        <a href="#top">无障碍</a><a href="#top">联系</a><a href="#top">协议</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2025 Green Search · Google 风格样本</span>
+      <span>一个色相，万千层次</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ FAB ============ -->
+<button class="fab ripple" id="fab" aria-label="返回顶部">
+  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+    <line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>
+  </svg>
+</button>
+
+<script>
+(function () {
+  "use strict";
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- 1. App Bar 滚动阴影 + FAB 显隐 ---------- */
+  const appbar = document.getElementById("appbar");
+  const fab = document.getElementById("fab");
+  let ticking = false;
+
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () {
+      const y = window.scrollY;
+      appbar.classList.toggle("is-scrolled", y > 8);
+      fab.classList.toggle("show", y > 400);
+      ticking = false;
+    });
+  }
+
+  /* ---------- 2. 涟漪 ---------- */
+  document.addEventListener("click", function (e) {
+    const el = e.target.closest(".ripple");
+    if (!el || reduceMotion) return;
+    const rect = el.getBoundingClientRect();
+    const d = Math.max(rect.width, rect.height) * 2;
+    const wave = document.createElement("span");
+    wave.className = "ripple__wave";
+    wave.style.width = wave.style.height = d + "px";
+    wave.style.left = (e.clientX - rect.left - d / 2) + "px";
+    wave.style.top = (e.clientY - rect.top - d / 2) + "px";
+    el.appendChild(wave);
+    setTimeout(function () { wave.remove(); }, 600);
+  });
+
+  /* ---------- 3. 滚动揭示 ---------- */
+  const revealTargets = document.querySelectorAll("[data-reveal]");
+  if ("IntersectionObserver" in window && !reduceMotion) {
+    const io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-in");
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
+    revealTargets.forEach(function (el) { io.observe(el); });
+  } else {
+    revealTargets.forEach(function (el) { el.classList.add("is-in"); });
+  }
+
+  /* ---------- 4. FAB 点击回顶 ---------- */
+  fab.addEventListener("click", function () {
+    window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+  });
+
+  /* ---------- 5. Chips 切换（演示状态层） ---------- */
+  document.querySelectorAll(".chip").forEach(function (chip) {
+    chip.addEventListener("click", function () {
+      document.querySelectorAll(".chip").forEach(function (c) { c.classList.remove("is-on"); });
+      chip.classList.add("is-on");
+    });
+  });
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll);
+  onScroll();
+})();
+</script>
+</body>
+</html>

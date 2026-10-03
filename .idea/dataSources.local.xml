@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal" created-in="PY-253.31033.139">
+    <data-source name="Amazon Athena" uuid="031e3176-5cbc-4a59-8c4b-bc7b6483e4c1">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="ATHENA" />
+      <secret-storage>master_key</secret-storage>
+      <schema-mapping />
+    </data-source>
+  </component>
+</project>

@@ -76,7 +76,7 @@ async def deal_with():
             # 循环工具列表
             Processed = 0
             for i in mail_tool:
-                re = i(mail=mail)
+                re = i(mail)
                 if re != None:
                     if type(re) == dict:
                         send_list.append(re)

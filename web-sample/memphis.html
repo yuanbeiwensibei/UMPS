@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Memphis Green · 孟菲斯绿色单色样本</title>
+<style>
+  /* ============ 设计令牌（单色相：仅绿色 + 黑白） ============ */
+  :root{
+    --ink:        #0A140E;   /* 墨黑（带绿调） */
+    --paper:      #FBFDFB;   /* 近白纸面 */
+
+    --green-050:  #F0F8F2;
+    --green-100:  #E2F2E6;
+    --green-200:  #C6E6CF;
+    --green-300:  #9ED3AE;
+    --green-400:  #6BBE88;
+    --green-500:  #3FA46B;
+    --green-600:  #2E8353;
+    --green-700:  #21633F;
+    --green-800:  #17462E;
+    --green-900:  #0F2E1F;
+
+    --shadow:   6px 6px 0 0 var(--ink);
+    --shadow-lg:10px 10px 0 0 var(--ink);
+    --radius:   20px;
+    --ease:     cubic-bezier(.34,1.56,.64,1);   /* 弹性，孟菲斯感 */
+  }
+
+  *,*::before,*::after{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+                "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+    font-size:16px; line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  h1,h2,h3{ margin:0; line-height:1.05; }
+  p{ margin:0; }
+  a{ color:inherit; text-decoration:none; }
+  svg{ display:block; }
+  ::selection{ background:var(--green-500); color:#fff; }
+
+  .wrap{ width:min(1160px, 100% - 40px); margin-inline:auto; }
+
+  /* ============ 顶部进度条 ============ */
+  .progress{
+    position:fixed; top:0; left:0; right:0; height:5px; z-index:60;
+    pointer-events:none;
+  }
+  .progress__bar{
+    height:100%; width:100%;
+    background:repeating-linear-gradient(-45deg, var(--green-500) 0 10px, var(--green-300) 10px 20px);
+    transform:scaleX(0); transform-origin:0 50%;
+    transition:transform .1s linear;
+  }
+
+  /* ============ 导航 ============ */
+  .nav{
+    position:fixed; top:5px; left:0; right:0; z-index:50;
+    transition:background .3s var(--ease), border-color .3s var(--ease);
+    border-bottom:2px solid transparent;
+  }
+  .nav.is-scrolled{
+    background:var(--paper);
+    border-bottom-color:var(--ink);
+  }
+  .nav__inner{
+    width:min(1160px, 100% - 40px); margin-inline:auto; height:64px;
+    display:flex; align-items:center; gap:26px;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:-.01em; }
+  .brand__mark{
+    width:30px; height:30px; border:2px solid var(--ink); border-radius:50%;
+    background:var(--green-500);
+    display:grid; place-items:center;
+    box-shadow:3px 3px 0 0 var(--ink);
+    transition:transform .4s var(--ease);
+  }
+  .brand:hover .brand__mark{ transform:rotate(180deg); }
+  .brand__mark i{
+    width:9px; height:9px; background:#fff; border-radius:50%; display:block;
+  }
+
+  .nav__links{ display:flex; gap:2px; margin-left:6px; }
+  .nav__links a{
+    position:relative; padding:7px 14px; font-size:14.5px; font-weight:600;
+    border-radius:999px;
+    transition:background .25s var(--ease), color .25s var(--ease);
+  }
+  .nav__links a:hover{ background:var(--green-100); }
+  .nav__links a::after{
+    content:""; position:absolute; left:14px; right:14px; bottom:2px; height:3px;
+    background:var(--green-500); border-radius:3px;
+    transform:scaleX(0); transform-origin:0 50%;
+    transition:transform .3s var(--ease);
+  }
+  .nav__links a:hover::after{ transform:scaleX(1); }
+  .nav__spacer{ margin-left:auto; }
+
+  /* ============ 按钮（孟菲斯硬阴影） ============ */
+  .btn{
+    position:relative;
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    padding:13px 26px; border:2px solid var(--ink); border-radius:999px;
+    font:inherit; font-size:15px; font-weight:700; cursor:pointer;
+    box-shadow:5px 5px 0 0 var(--ink);
+    transition:transform .2s var(--ease), box-shadow .2s var(--ease), background .2s var(--ease), color .2s var(--ease);
+  }
+  .btn:hover{ transform:translate(-2px,-2px); box-shadow:8px 8px 0 0 var(--ink); }
+  .btn:active{ transform:translate(4px,4px); box-shadow:1px 1px 0 0 var(--ink); }
+
+  .btn--solid{ background:var(--green-500); color:#fff; }
+  .btn--solid:hover{ background:var(--green-600); }
+  .btn--paper{ background:var(--paper); color:var(--ink); }
+  .btn--paper:hover{ background:var(--green-100); }
+  .btn--sm{ padding:9px 18px; font-size:14px; }
+
+  /* ============ Hero ============ */
+  .hero{
+    position:relative; padding:110px 0 70px;
+    /* 点阵底纹 */
+    background-image:radial-gradient(var(--green-200) 1.5px, transparent 1.5px);
+    background-size:26px 26px;
+  }
+  .hero::after{
+    content:""; position:absolute; inset:0;
+    background:linear-gradient(180deg, transparent 55%, var(--paper));
+    pointer-events:none;
+  }
+  .hero__grid{
+    position:relative; z-index:2;
+    display:grid; grid-template-columns:1.1fr .9fr; gap:48px; align-items:center;
+  }
+
+  .badge{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:5px 16px 5px 5px; border:2px solid var(--ink); border-radius:999px;
+    background:var(--green-100); font-size:13px; font-weight:700;
+    box-shadow:4px 4px 0 0 var(--ink);
+  }
+  .badge b{
+    display:inline-grid; place-items:center; width:22px; height:22px;
+    background:var(--green-500); color:#fff; border-radius:50%;
+    font-size:11px;
+  }
+
+  h1.hero__title{
+    margin:26px 0 0;
+    font-size:clamp(40px, 6.4vw, 78px);
+    font-weight:900; letter-spacing:-.03em; line-height:.98;
+  }
+  .hero__title .row{ display:block; overflow:hidden; padding-bottom:.12em; margin-bottom:-.12em; }
+  .hero__title .row > span{
+    display:inline-block;
+    animation:popIn .7s var(--ease) both;
+  }
+  @keyframes popIn{
+    from{ transform:translateY(120%) rotate(-3deg); }
+    to  { transform:translateY(0) rotate(0); }
+  }
+  .hero__title .fill{
+    background:linear-gradient(120deg, var(--green-600), var(--green-400));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero__title .outline{
+    color:transparent;
+    -webkit-text-stroke:2.5px var(--ink);
+    text-stroke:2.5px var(--ink);
+    -webkit-text-fill-color:transparent;
+  }
+
+  .hero__lead{
+    margin-top:26px; max-width:46ch; font-size:17.5px;
+    color:var(--green-800); font-weight:500;
+  }
+  .hero__actions{ display:flex; flex-wrap:wrap; gap:14px; margin-top:36px; }
+
+  /* ---- 右侧几何拼贴板 ---- */
+  .board{
+    position:relative; height:440px;
+  }
+  .tile{ position:absolute; }
+  .tile svg, .tile div{ width:100%; height:100%; }
+
+  .t--ring{ width:210px; height:210px; top:8px; right:16px; }
+  .t--ring .donut{
+    border:14px solid var(--green-500); border-radius:50%;
+    border-right-color:var(--green-300);
+    box-shadow:var(--shadow);
+    animation:spin 9s linear infinite;
+  }
+  .t--ring .donut::after{
+    content:""; position:absolute; inset:0; margin:auto; width:26px; height:26px;
+    background:var(--green-200); border:2px solid var(--ink); border-radius:50%;
+  }
+
+  .t--tri{ width:150px; height:130px; bottom:46px; left:6px; --r:-8deg; animation:floaty 6s ease-in-out infinite; }
+  .t--tri .tri{
+    clip-path:polygon(50% 0, 100% 100%, 0 100%);
+    background:repeating-linear-gradient(-45deg, var(--green-500) 0 12px, var(--green-300) 12px 24px);
+    filter:drop-shadow(6px 6px 0 var(--ink));
+  }
+
+  .t--arch{ width:140px; height:170px; bottom:0; right:140px; --r:6deg; animation:floaty 7s ease-in-out infinite reverse; }
+  .t--arch .arch{
+    border:2px solid var(--ink); border-radius:70px 70px 0 0;
+    background:var(--green-600);
+    box-shadow:var(--shadow);
+    overflow:hidden;
+  }
+  .t--arch .arch::before{
+    content:""; position:absolute; inset:auto 0 0 0; height:60%;
+    background:repeating-linear-gradient(-45deg, transparent 0 10px, rgba(255,255,255,.16) 10px 20px);
+  }
+
+  .t--dots{ width:120px; height:120px; top:30px; left:20px; --r:-4deg; animation:floaty 8s ease-in-out infinite; }
+  .t--dots .dots{
+    background-image:radial-gradient(var(--ink) 3px, transparent 3px);
+    background-size:22px 22px;
+    border:2px solid var(--ink); border-radius:18px; background-color:var(--green-100);
+    box-shadow:var(--shadow);
+  }
+
+  .t--zig{ width:190px; height:34px; top:150px; left:60px; --r:2deg; animation:floaty 9s ease-in-out infinite; }
+  .t--zig svg{ filter:drop-shadow(4px 4px 0 var(--ink)); }
+
+  /* 中心海报卡 */
+  .poster{
+    position:absolute; top:120px; left:50%; transform:translateX(-50%) rotate(-3deg);
+    width:280px; padding:22px;
+    background:var(--paper); border:2px solid var(--ink); border-radius:var(--radius);
+    box-shadow:var(--shadow-lg);
+    animation:posterBob 5.5s ease-in-out infinite;
+    transition:transform .35s var(--ease), box-shadow .35s var(--ease);
+  }
+  .poster:hover{ box-shadow:14px 14px 0 0 var(--ink); }
+  @keyframes posterBob{
+    0%,100%{ transform:translateX(-50%) rotate(-3deg) translateY(0); }
+    50%    { transform:translateX(-50%) rotate(-1deg) translateY(-10px); }
+  }
+  .poster__art{
+    position:relative; height:150px; border:2px solid var(--ink); border-radius:14px;
+    background:var(--green-200); overflow:hidden;
+  }
+  .poster__art .p-circle{
+    position:absolute; width:70px; height:70px; border-radius:50%;
+    background:var(--green-500); border:2px solid var(--ink); top:14px; left:16px;
+  }
+  .poster__art .p-wave{
+    position:absolute; right:-6px; bottom:10px; width:170px; height:60px;
+  }
+  .poster__art .p-squig{
+    position:absolute; top:18px; right:14px; width:120px; height:40px;
+  }
+  .poster h4{ margin-top:14px; font-size:17px; font-weight:800; }
+  .poster p{ margin-top:4px; font-size:12.5px; color:var(--green-700); font-weight:600; }
+
+  @keyframes floaty{
+    0%,100%{ transform:translateY(0) rotate(var(--r,0deg)); }
+    50%    { transform:translateY(-14px) rotate(calc(var(--r,0deg) + 5deg)); }
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  /* ============ 跑马灯带 ============ */
+  .band{
+    position:relative; z-index:3;
+    border-top:2px solid var(--ink); border-bottom:2px solid var(--ink);
+    background:var(--green-500); color:#fff;
+    overflow:hidden; transform:rotate(-1.4deg); margin:30px -20px;
+  }
+  .band__track{
+    display:flex; width:max-content; white-space:nowrap;
+    animation:marquee 22s linear infinite;
+  }
+  .band__track span{
+    display:inline-flex; align-items:center; gap:22px;
+    padding:14px 0; font-size:15px; font-weight:800; letter-spacing:.06em;
+  }
+  .band__track span::after{ content:"◆"; font-size:10px; color:var(--green-200); }
+  @keyframes marquee{ to{ transform:translateX(-50%); } }
+
+  /* ============ 区块标题 ============ */
+  .section{ padding:84px 0; }
+  .head{ display:flex; flex-wrap:wrap; align-items:flex-end; gap:18px; margin-bottom:46px; }
+  .head .kicker{
+    font-size:13px; font-weight:800; letter-spacing:.18em;
+    color:var(--green-600);
+    border:2px solid var(--ink); border-radius:999px; padding:5px 14px;
+    background:var(--green-100); box-shadow:4px 4px 0 0 var(--ink);
+  }
+  .head h2{ font-size:clamp(28px, 4vw, 46px); font-weight:900; letter-spacing:-.02em; }
+  .head p{ margin-left:auto; max-width:34ch; color:var(--green-800); font-size:15.5px; }
+
+  /* ============ 特性卡片（错落旋转） ============ */
+  .cards{ display:grid; grid-template-columns:repeat(4, 1fr); gap:22px; }
+  .card{
+    position:relative;
+    background:var(--paper); border:2px solid var(--ink); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:24px 22px 26px;
+    transition:transform .28s var(--ease), box-shadow .28s var(--ease);
+  }
+  .card:nth-child(odd){ transform:rotate(-1.4deg); }
+  .card:nth-child(even){ transform:rotate(1.1deg); }
+  .card:hover{
+    transform:translate(-3px,-3px) rotate(0deg) !important;
+    box-shadow:var(--shadow-lg);
+  }
+
+  .card__glyph{
+    position:relative; height:92px; border:2px solid var(--ink); border-radius:14px;
+    margin-bottom:18px; overflow:hidden;
+  }
+  .card__glyph span, .card__glyph i, .card__glyph b{ position:absolute; display:block; }
+
+  /* 各卡片图案 */
+  .g1{ background:var(--green-100); }
+  .g1 .c1{ width:44px; height:44px; border-radius:50%; background:var(--green-500); border:2px solid var(--ink); top:18px; left:22px; }
+  .g1 .t1{ width:0; height:0; border-left:26px solid transparent; border-right:26px solid transparent; border-bottom:42px solid var(--green-600); right:22px; bottom:16px; }
+  .g1 .s1{ width:70px; height:16px; border-radius:8px 8px 0 0; background:var(--green-300); border:2px solid var(--ink); left:80px; bottom:0; }
+
+  .g2{ background:var(--green-500); }
+  .g2 .c2{ width:54px; height:54px; border:10px solid var(--green-200); border-radius:50%; top:14px; left:18px; border-right-color:var(--green-800); }
+  .g2 .l2{ width:80px; height:6px; background:#fff; left:90px; top:30px; }
+  .g2 .l3{ width:56px; height:6px; background:#fff; left:90px; top:44px; }
+  .g2 .d2{ width:12px; height:12px; background:var(--green-200); border-radius:50%; right:20px; bottom:18px; }
+
+  .g3{ background:var(--green-200); }
+  .g3 .c3{ width:60px; height:60px; border-radius:50%; background:var(--green-700); top:12px; left:14px; }
+  .g3 .r3{ width:52px; height:52px; border:2px solid var(--ink); right:20px; top:18px; background:repeating-linear-gradient(-45deg, var(--green-400) 0 8px, var(--green-100) 8px 16px); }
+  .g3 .z3{ width:90px; height:14px; bottom:14px; left:60px; background:repeating-linear-gradient(-45deg, var(--ink) 0 6px, transparent 6px 12px); }
+
+  .g4{ background:var(--green-300); }
+  .g4 .c4{ width:46px; height:46px; background:var(--green-800); border-radius:50%; top:16px; right:20px; }
+  .g4 .w4{ width:120px; height:40px; left:14px; bottom:12px; border:2px solid var(--ink); border-radius:999px; background:var(--green-100); }
+  .g4 .d4{ width:10px; height:10px; background:var(--ink); border-radius:50%; top:14px; left:24px; }
+
+  .card h3{ font-size:18px; font-weight:800; }
+  .card .num{
+    position:absolute; top:16px; right:16px; font-size:13px; font-weight:900;
+    color:var(--green-600);
+  }
+  .card p{ margin-top:10px; font-size:14.5px; color:var(--green-800); }
+
+  /* ============ 拼贴画廊 ============ */
+  .gallery{
+    display:grid; grid-template-columns:repeat(12, 1fr);
+    grid-auto-rows:110px; gap:20px;
+  }
+  .cell{
+    border:2px solid var(--ink); border-radius:var(--radius);
+    box-shadow:var(--shadow); position:relative; overflow:hidden;
+    transition:transform .3s var(--ease), box-shadow .3s var(--ease);
+  }
+  .cell:hover{ transform:translate(-3px,-3px); box-shadow:var(--shadow-lg); }
+  .cell span{ position:absolute; display:block; }
+
+  .a{ grid-column:1/5; grid-row:1/3; background:var(--green-600); }
+  .a .a1{ width:90px; height:90px; border-radius:50%; background:var(--green-200); border:2px solid var(--ink); top:26px; left:26px; }
+  .a .a2{ width:0; height:0; border-left:40px solid transparent; border-right:40px solid transparent; border-bottom:66px solid var(--green-900); right:24px; bottom:22px; }
+  .a .a3{ width:80px; height:80px; border:2px dashed #fff; border-radius:50%; left:40%; top:30%; animation:spin 14s linear infinite; }
+
+  .b{ grid-column:5/8; grid-row:1/2; background:var(--green-200); }
+  .b .b1{ width:64px; height:64px; background:var(--green-500); border-radius:50%; top:14px; right:18px; }
+  .b .b2{ left:20px; bottom:14px; width:100px; height:20px; background:repeating-linear-gradient(-45deg, var(--ink) 0 6px, transparent 6px 12px); }
+
+  .c{ grid-column:8/13; grid-row:1/3; background:var(--green-100); }
+  .c .c1{ width:150px; height:150px; border-radius:50%; border:12px solid var(--green-500); top:20px; left:50%; transform:translateX(-50%); border-bottom-color:var(--green-300); animation:spin 16s linear infinite reverse; }
+  .c .c2{ left:24px; bottom:26px; font-size:40px; font-weight:900; color:var(--green-700); letter-spacing:-.04em; }
+
+  .d{ grid-column:5/8; grid-row:2/3; background:var(--green-300); }
+  .d .d1{ width:0; height:0; border-left:30px solid transparent; border-right:30px solid transparent; border-bottom:50px solid var(--green-800); left:24px; top:22px; }
+  .d .d2{ width:44px; height:44px; border-radius:50%; background:var(--green-100); border:2px solid var(--ink); right:22px; bottom:16px; }
+
+  .e{ grid-column:1/4; grid-row:3/4; background:var(--green-300); display:grid; place-items:center; }
+  .e .e1{ width:70px; height:70px; background:var(--green-700); border-radius:50%; animation:pulseRing 3s var(--ease) infinite; }
+  @keyframes pulseRing{
+    0%,100%{ transform:scale(1); }
+    50%    { transform:scale(.72); }
+  }
+
+  .f{ grid-column:4/9; grid-row:3/4; background:var(--green-500); display:grid; place-items:center; }
+  .f .f1{ font-size:34px; font-weight:900; color:#fff; letter-spacing:-.02em; }
+
+  .g{ grid-column:9/13; grid-row:3/4; background:var(--green-200); }
+  .g .g1{ width:120px; height:50px; border:2px solid var(--ink); border-radius:999px; background:var(--green-100); top:22px; left:20px; }
+  .g .g2{ right:20px; bottom:18px; width:60px; height:30px; background:repeating-linear-gradient(-45deg, var(--green-600) 0 8px, transparent 8px 16px); }
+
+  /* ============ 数据条 ============ */
+  .stats{
+    border:2px solid var(--ink); border-radius:var(--radius);
+    box-shadow:var(--shadow-lg);
+    background:var(--green-500);
+    display:grid; grid-template-columns:repeat(3, 1fr);
+    position:relative; overflow:hidden;
+  }
+  .stats::before{
+    content:""; position:absolute; inset:0;
+    background-image:radial-gradient(rgba(255,255,255,.18) 2px, transparent 2px);
+    background-size:22px 22px;
+  }
+  .stat{ position:relative; padding:34px 30px; color:#fff; }
+  .stat + .stat{ border-left:2px solid var(--ink); }
+  .stat__num{
+    font-size:clamp(32px, 4.5vw, 54px); font-weight:900; letter-spacing:-.03em;
+    font-variant-numeric:tabular-nums;
+  }
+  .stat__label{ font-size:14px; font-weight:700; opacity:.85; margin-top:4px; }
+  .stat__glyph{
+    position:absolute; top:20px; right:20px; width:30px; height:30px;
+    border-radius:50%; border:2px solid var(--ink); background:var(--green-300);
+    display:grid; place-items:center;
+  }
+
+  /* ============ CTA ============ */
+  .cta{
+    position:relative; padding:66px 40px; text-align:center;
+    border:2px solid var(--ink); border-radius:var(--radius-l, 28px);
+    box-shadow:var(--shadow-lg); background:var(--green-100);
+    overflow:hidden;
+  }
+  .cta .confetti{ position:absolute; inset:0; pointer-events:none; }
+  .cta h2{
+    position:relative; font-size:clamp(26px, 4vw, 44px); font-weight:900;
+    letter-spacing:-.02em; margin-bottom:12px;
+  }
+  .cta h2 em{
+    font-style:normal; color:var(--green-600);
+    -webkit-text-stroke:1.5px var(--ink); text-stroke:1.5px var(--ink);
+    -webkit-text-fill-color:var(--green-400);
+  }
+  .cta p{ position:relative; margin:0 auto 30px; max-width:46ch; color:var(--green-800); font-size:16px; }
+  .cta__actions{ position:relative; display:flex; justify-content:center; gap:14px; flex-wrap:wrap; }
+
+  /* ============ 页脚 ============ */
+  .footer{ margin-top:70px; border-top:2px solid var(--ink); padding:40px 0 46px; background:var(--green-050); }
+  .footer__inner{ display:flex; flex-wrap:wrap; gap:18px; justify-content:space-between; align-items:center; font-size:14px; color:var(--green-800); font-weight:600; }
+  .footer__links{ display:flex; gap:24px; }
+  .footer__links a{ transition:color .2s var(--ease); }
+  .footer__links a:hover{ color:var(--green-600); }
+
+  /* ============ 揭示动画 ============ */
+  [data-reveal]{
+    opacity:0; transform:translateY(30px) rotate(var(--rv, 0deg));
+    transition:opacity .7s var(--ease), transform .7s var(--ease);
+    transition-delay:var(--delay, 0ms);
+  }
+  [data-reveal].is-in{ opacity:1; transform:none; }
+
+  :focus-visible{ outline:3px solid var(--green-600); outline-offset:3px; border-radius:8px; }
+
+  /* ============ 响应式 ============ */
+  @media (max-width: 1000px){
+    .hero__grid{ grid-template-columns:1fr; }
+    .board{ height:400px; margin-top:10px; }
+    .cards{ grid-template-columns:repeat(2, 1fr); }
+  }
+  @media (max-width: 720px){
+    .nav__links{ display:none; }
+    .cards{ grid-template-columns:1fr; }
+    .gallery{ grid-template-columns:repeat(2,1fr); grid-auto-rows:96px; }
+    .a{ grid-column:1/3; grid-row:auto; }
+    .b,.c,.d,.e,.f,.g{ grid-column:auto; grid-row:auto; }
+    .stats{ grid-template-columns:1fr; }
+    .stat + .stat{ border-left:none; border-top:2px solid var(--ink); }
+    .poster{ left:50%; top:90px; }
+    .t--ring{ right:-10px; }
+    .t--tri{ left:-10px; }
+  }
+
+  /* ============ 降低动效偏好 ============ */
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *,*::before,*::after{
+      animation-duration:.001ms !important; animation-iteration-count:1 !important;
+      transition-duration:.001ms !important;
+    }
+    [data-reveal]{ opacity:1 !important; transform:none !important; }
+    .hero__title .row > span{ transform:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress" aria-hidden="true"><div class="progress__bar" id="progressBar"></div></div>
+
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <a class="brand" href="#top">
+      <span class="brand__mark" aria-hidden="true"><i></i></span>
+      MEMPHIS·绿
+    </a>
+    <nav class="nav__links">
+      <a href="#geometry">几何</a>
+      <a href="#gallery">拼贴</a>
+      <a href="#stats">数据</a>
+      <a href="#cta">加入</a>
+    </nav>
+    <span class="nav__spacer"></span>
+    <a class="btn btn--solid btn--sm" href="#cta">开始玩色</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ Hero ============ -->
+  <section class="hero">
+    <div class="wrap hero__grid">
+      <div>
+        <span class="badge"><b>●</b> 单色相 · 孟菲斯限定</span>
+
+        <h1 class="hero__title">
+          <span class="row"><span class="fill" style="animation-delay:.08s">打破网格，</span></span>
+          <span class="row"><span class="outline" style="animation-delay:.2s">大胆生长</span></span>
+        </h1>
+
+        <p class="hero__lead" data-reveal style="--delay:.4s">
+          把 1980 年代的孟菲斯涂鸦，压进同一个绿色色相里 ——
+          圆形、锯齿、波浪与点阵轮番登场，闹而不乱。
+        </p>
+
+        <div class="hero__actions" data-reveal style="--delay:.52s">
+          <a class="btn btn--solid" href="#geometry">开始玩色</a>
+          <a class="btn btn--paper" href="#gallery">看几何拼贴</a>
+        </div>
+      </div>
+
+      <!-- 几何拼贴板 -->
+      <div class="board" aria-hidden="true">
+        <div class="tile t--ring"><div class="donut"></div></div>
+        <div class="tile t--tri"><div class="tri"></div></div>
+        <div class="tile t--arch"><div class="arch"></div></div>
+        <div class="tile t--dots"><div class="dots"></div></div>
+        <div class="tile t--zig">
+          <svg viewBox="0 0 190 34" preserveAspectRatio="none">
+            <polyline points="0,24 19,6 38,24 57,6 76,24 95,6 114,24 133,6 152,24 171,6 190,24"
+                      fill="none" stroke="var(--green-600)" stroke-width="4"/>
+          </svg>
+        </div>
+
+        <div class="poster">
+          <div class="poster__art">
+            <span class="p-circle"></span>
+            <svg class="p-wave" viewBox="0 0 170 60" preserveAspectRatio="none">
+              <path d="M0 40 Q 21 12 42 40 T 84 40 T 126 40 T 170 40"
+                    fill="none" stroke="var(--ink)" stroke-width="3"/>
+            </svg>
+            <svg class="p-squig" viewBox="0 0 120 40" preserveAspectRatio="none">
+              <path d="M0 20 Q 15 0 30 20 T 60 20 T 90 20 T 120 20"
+                    fill="none" stroke="var(--green-800)" stroke-width="3"/>
+            </svg>
+          </div>
+          <h4>PLAY WITH GREEN</h4>
+          <p>一种色相，无限几何 —— 样本 No.02</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 跑马灯带 ============ -->
+  <div class="band" aria-hidden="true">
+    <div class="band__track">
+      <span>几何至上</span><span>粗黑描边</span><span>硬质阴影</span>
+      <span>单色撞色</span><span>点阵</span><span>锯齿</span><span>波浪</span>
+      <span>几何至上</span><span>粗黑描边</span><span>硬质阴影</span>
+      <span>单色撞色</span><span>点阵</span><span>锯齿</span><span>波浪</span>
+    </div>
+  </div>
+
+  <!-- ============ 特性 ============ -->
+  <section class="section" id="geometry">
+    <div class="wrap">
+      <div class="head" data-reveal>
+        <span class="kicker">设计原则</span>
+        <h2>四大孟菲斯基因</h2>
+        <p>只动用一个绿色色相，靠明暗与几何制造冲突，黑白只做描边与骨架。</p>
+      </div>
+
+      <div class="cards">
+        <article class="card" data-reveal style="--delay:0ms">
+          <span class="num">01</span>
+          <div class="card__glyph g1">
+            <span class="c1"></span><span class="t1"></span><span class="s1"></span>
+          </div>
+          <h3>几何至上</h3>
+          <p>圆、三角、拱形、半圆拼贴成画面，拒绝一切写实。</p>
+        </article>
+
+        <article class="card" data-reveal style="--delay:.1s">
+          <span class="num">02</span>
+          <div class="card__glyph g2">
+            <span class="c2"></span><span class="l2"></span><span class="l3"></span><span class="d2"></span>
+          </div>
+          <h3>粗黑描边</h3>
+          <p>每个元素统一 2px 墨黑轮廓，像贴纸一样干脆利落。</p>
+        </article>
+
+        <article class="card" data-reveal style="--delay:.2s">
+          <span class="num">03</span>
+          <div class="card__glyph g3">
+            <span class="c3"></span><span class="r3"></span><span class="z3"></span>
+          </div>
+          <h3>硬质阴影</h3>
+          <p>块状投影取代柔和渐变，色彩压在纸面上有份量。</p>
+        </article>
+
+        <article class="card" data-reveal style="--delay:.3s">
+          <span class="num">04</span>
+          <div class="card__glyph g4">
+            <span class="c4"></span><span class="w4"></span><span class="d4"></span>
+          </div>
+          <h3>单色撞色</h3>
+          <p>同一绿色相里，用 #E2F2E6 撞 #17462E，明暗即反差。</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 拼贴画廊 ============ -->
+  <section class="section" id="gallery" style="padding-top:20px;">
+    <div class="wrap">
+      <div class="head" data-reveal>
+        <span class="kicker">几何拼贴</span>
+        <h2>把形状铺成墙</h2>
+        <p>一块不对称网格，七个几何单元，同一色相的明暗交错。</p>
+      </div>
+
+      <div class="gallery">
+        <div class="cell a" data-reveal style="--delay:0ms">
+          <span class="a1"></span><span class="a2"></span><span class="a3"></span>
+        </div>
+        <div class="cell b" data-reveal style="--delay:.08s">
+          <span class="b1"></span><span class="b2"></span>
+        </div>
+        <div class="cell c" data-reveal style="--delay:.16s">
+          <span class="c1"></span><span class="c2">GREEN</span>
+        </div>
+        <div class="cell d" data-reveal style="--delay:.24s">
+          <span class="d1"></span><span class="d2"></span>
+        </div>
+        <div class="cell e" data-reveal style="--delay:.32s">
+          <span class="e1"></span>
+        </div>
+        <div class="cell f" data-reveal style="--delay:.4s">
+          <span class="f1">MEMPHIS</span>
+        </div>
+        <div class="cell g" data-reveal style="--delay:.48s">
+          <span class="g1"></span><span class="g2"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 数据条 ============ -->
+  <section class="section" id="stats" style="padding-top:20px;">
+    <div class="wrap">
+      <div class="stats" data-reveal>
+        <div class="stat">
+          <span class="stat__glyph">●</span>
+          <div class="stat__num" data-count="12" data-suffix="">0</div>
+          <div class="stat__label">种几何形状</div>
+        </div>
+        <div class="stat">
+          <span class="stat__glyph">▲</span>
+          <div class="stat__num" data-count="9" data-suffix="">0</div>
+          <div class="stat__label">档绿色阶</div>
+        </div>
+        <div class="stat">
+          <span class="stat__glyph">◆</span>
+          <div class="stat__num" data-count="1981" data-suffix="">0</div>
+          <div class="stat__label">孟菲斯诞生之年</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <section class="section" id="cta" style="padding-top:20px;">
+    <div class="wrap">
+      <div class="cta" data-reveal>
+        <div class="confetti" aria-hidden="true">
+          <svg viewBox="0 0 400 200" preserveAspectRatio="none" style="width:100%;height:100%">
+            <circle cx="30" cy="40" r="14" fill="var(--green-400)" stroke="var(--ink)" stroke-width="2"/>
+            <circle cx="370" cy="30" r="10" fill="var(--green-600)" stroke="var(--ink)" stroke-width="2"/>
+            <polygon points="60,150 80,120 100,150" fill="var(--green-500)" stroke="var(--ink)" stroke-width="2"/>
+            <polygon points="330,160 350,130 370,160" fill="var(--green-300)" stroke="var(--ink)" stroke-width="2"/>
+            <rect x="180" y="20" width="22" height="22" fill="var(--green-200)" stroke="var(--ink)" stroke-width="2" transform="rotate(18 191 31)"/>
+            <rect x="140" y="160" width="18" height="18" fill="var(--green-400)" stroke="var(--ink)" stroke-width="2" transform="rotate(24 149 169)"/>
+            <circle cx="220" cy="170" r="8" fill="var(--green-700)"/>
+          </svg>
+        </div>
+        <h2>准备好，<em>玩转绿色</em>了吗？</h2>
+        <p>这是一份单文件样本：纯绿色相、零依赖、可离线。把它放进你的项目，立刻开始拼贴。</p>
+        <div class="cta__actions">
+          <a class="btn btn--solid" href="#top">回到顶部</a>
+          <a class="btn btn--paper" href="#geometry">再看一遍</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <div>© 2025 MEMPHIS·绿 · 单色相孟菲斯样本</div>
+    <div class="footer__links">
+      <a href="#geometry">几何</a>
+      <a href="#gallery">拼贴</a>
+      <a href="#cta">加入</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- 1. 顶部进度条 ---------- */
+  const bar = document.getElementById("progressBar");
+  const nav = document.getElementById("nav");
+  let ticking = false;
+
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () {
+      const doc = document.documentElement;
+      const max = doc.scrollHeight - doc.clientHeight;
+      const ratio = max > 0 ? Math.min(1, doc.scrollTop / max) : 0;
+      bar.style.transform = "scaleX(" + ratio + ")";
+      nav.classList.toggle("is-scrolled", window.scrollY > 10);
+      ticking = false;
+    });
+  }
+
+  /* ---------- 2. 滚动揭示 ---------- */
+  const revealTargets = document.querySelectorAll("[data-reveal]");
+  if ("IntersectionObserver" in window && !reduceMotion) {
+    const io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-in");
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
+    revealTargets.forEach(function (el) { io.observe(el); });
+  } else {
+    revealTargets.forEach(function (el) { el.classList.add("is-in"); });
+  }
+
+  /* ---------- 3. 数值滚动 ---------- */
+  function runCounter(el) {
+    const target = parseInt(el.dataset.count || "0", 10);
+    const suffix = el.dataset.suffix || "";
+    if (reduceMotion) { el.textContent = target + suffix; return; }
+    const duration = 1500;
+    const start = performance.now();
+    function frame(now) {
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 4);
+      el.textContent = Math.round(target * eased) + suffix;
+      if (t < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+  const counters = document.querySelectorAll("[data-count]");
+  if ("IntersectionObserver" in window) {
+    const cio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) { runCounter(entry.target); cio.unobserve(entry.target); }
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(function (el) { cio.observe(el); });
+  } else {
+    counters.forEach(runCounter);
+  }
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll);
+  onScroll();
+})();
+</script>
+</body>
+</html>
